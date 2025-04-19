@@ -17,7 +17,6 @@ public static class Player
         if (CurrentLocation.Name == "Home" && !Conditions.IsTrue(ConditionTypes.ReadJonNote))
         {
             TextDisplay.TypeLine("You feel like you should check if there's anything important on the note before you leave.");
-            TextDisplay.TypeLine("Try the [take] and [use] commands.");
             return;
         }
         
@@ -25,6 +24,13 @@ public static class Player
         {
             CurrentLocation = CurrentLocation.GetLocationInDirection(command);
             Look(); // Use the Look method to display location without double NPCs
+            
+            // Check if this location can have wild Pals (Verdant Grasslands)
+            if (CurrentLocation.Name == "Verdant Grasslands")
+            {
+                // Try to spawn a wild Pal
+                WildPalManager.SpawnWildPalInLocation(CurrentLocation.Name);
+            }
         }
         else
         {

@@ -2,25 +2,21 @@ namespace AdventureS25;
 
 public static class CombatCommandValidator
 {
+    // List of valid combat commands
+    private static readonly string[] validCommands = new string[]
+    {
+        "attack", 
+        "defend", 
+        "special",
+        "tame",    // Added tame command
+        "run",
+        "pals",
+        "help"
+    };
+    
     public static bool IsValid(Command command)
     {
-        // Only accept text commands and reject numeric commands
-        if (command.Verb.ToLower() == "attack" ||
-            command.Verb.ToLower() == "defend" ||
-            command.Verb.ToLower() == "special" ||
-            command.Verb.ToLower() == "run")
-        {
-            return true;
-        }
-        
-        // Check for numeric input to give more helpful error message
-        if (command.Verb == "1" || command.Verb == "2" ||
-            command.Verb == "3" || command.Verb == "4")
-        {
-            TextDisplay.TypeLine("Please use text commands instead of numbers.");
-        }
-        
-        TextDisplay.TypeLine("Valid commands are: attack, defend, special, run");
-        return false;
+        // Check if the command is in our list of valid commands
+        return validCommands.Contains(command.Verb.ToLower());
     }
 }

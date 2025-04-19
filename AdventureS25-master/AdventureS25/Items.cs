@@ -42,6 +42,11 @@ public static class Items
             "A disgusting pile of puke.");
         nameToItem.Add("puke", puke);
         
+        Item palTreats = new Item("pal-treats",
+            "special treats used to tame wild Pals",
+            "A bag of special treats designed to tame wild Pals.");
+        nameToItem.Add("pal-treats", palTreats);
+        
         // tell the map to add the item at a specific location
         Map.AddItem(note.Name, "Home");
         Map.AddItem(donut.Name, "Storage");

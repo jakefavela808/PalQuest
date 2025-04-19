@@ -37,6 +37,8 @@ public static class Game
         Items.Initialize();
         NPCs.Initialize();
         Pals.Initialize(); // Initialize the Pals system
+        Pals_Wild.Initialize(); // Initialize wild Pals
+        WildPalManager.Initialize(); // Initialize wild Pal management system
         Player.Initialize();
     }
 }

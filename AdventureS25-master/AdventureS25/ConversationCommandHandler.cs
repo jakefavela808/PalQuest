@@ -176,9 +176,11 @@ public static class ConversationCommandHandler
             // Get the player's Pals and heal them
             var playerPals = Pals.GetPlayerPals();
             bool anyHealed = false;
+            bool anyEnergyRestored = false;
             
             foreach (var pal in playerPals)
             {
+                // Check if health needs to be restored
                 if (pal.Health < pal.MaxHealth)
                 {
                     // Heal the Pal to full health
@@ -187,15 +189,33 @@ public static class ConversationCommandHandler
                     TextDisplay.TypeLine($"{pal.Name} was healed for {healAmount} health points!");
                     anyHealed = true;
                 }
+                
+                // Check if attack energy needs to be restored
+                if (pal.AttackEnergy < pal.MaxAttackEnergy)
+                {
+                    int energyAmount = pal.MaxAttackEnergy - pal.AttackEnergy;
+                    pal.AttackEnergy = pal.MaxAttackEnergy;
+                    TextDisplay.TypeLine($"{pal.Name}'s attack energy was restored by {energyAmount} points!");
+                    anyEnergyRestored = true;
+                }
+                
+                // Check if special energy needs to be restored
+                if (pal.SpecialEnergy < pal.MaxSpecialEnergy)
+                {
+                    int specialAmount = pal.MaxSpecialEnergy - pal.SpecialEnergy;
+                    pal.SpecialEnergy = pal.MaxSpecialEnergy;
+                    TextDisplay.TypeLine($"{pal.Name}'s special energy was restored by {specialAmount} points!");
+                    anyEnergyRestored = true;
+                }
             }
             
-            if (anyHealed)
+            if (anyHealed || anyEnergyRestored)
             {
-                TextDisplay.TypeLine("\nNurse: \"Your Pals have been completely restored! We hope to see you again!\"");
+                TextDisplay.TypeLine("\nNurse: \"Your Pals have been completely restored to full health and energy! We hope to see you again!\"");
             }
             else
             {
-                TextDisplay.TypeLine("\nNurse: \"Your Pals are already in perfect health! We hope to see you again!\"");
+                TextDisplay.TypeLine("\nNurse: \"Your Pals are already in perfect condition! We hope to see you again!\"");
             }
             
             // End the conversation without showing commands again
@@ -295,7 +315,7 @@ public static class ConversationCommandHandler
             return;
         }
         
-        TextDisplay.TypeLine("Nurse: \"Welcome to the Pal Center! We can restore your Pals to perfect health. Would you like me to heal your Pals?\"");
+        TextDisplay.TypeLine("Nurse: \"Welcome to the Pal Center! We can restore your Pals to perfect health and replenish their energy. Would you like me to heal your Pals?\"");
         
         AwaitingResponse = true;
         OfferType = "heal_pals";
@@ -323,8 +343,17 @@ public static class ConversationCommandHandler
         TextDisplay.TypeLine("Jon: \"*Burp* Well look at that! Y-your Pal did pretty good out there! I knew you had some f-fight in you, kid!\"");
         TextDisplay.TypeLine("Jon: \"Hey, your Sandie looks a little banged up from that b-battle. You should head over to the *burp* Pal Center west of the Verdant Grasslands to get her fixed up!\"");
         
-        TextDisplay.TypeLine("Jon: \"The Pal Center is a bright, modern building with a large red and white sign. They can heal up your Sandie to full health. Just talk to the n-nurse at the *burp* counter. I've got some important Computer Science to get back to!\"");
-        TextDisplay.TypeLine("Professor Jon stumbles off, taking occasional swigs from his flask as he mutters about 'dimensional portal technology'.");
+        TextDisplay.TypeLine("Jon: \"The Pal Center is a bright, modern building with a large red and white sign. They can heal up your Sandie to full health. Just talk to the n-nurse at the *burp* counter.\"");
+        
+        // Give player Pal treats for taming wild Pals
+        TextDisplay.TypeLine("Jon: \"Oh, and take these *burp* Pal treats. If you see any w-wild Pals in the Verdant Grasslands, you can *burp* tame them by offering these treats. Just use the [tame] command when you spot a wild Pal.\"");
+        TextDisplay.TypeLine("Jon: \"You can also f-fight wild Pals with your own Pal using the [fight] command. *Burp* It'll make your Pal stronger and help it level up!\"");
+        
+        // Add Pal treats to player's inventory
+        Player.AddItemToInventory("pal-treats");
+        TextDisplay.TypeLine("\nYou received Pal treats! These can be used to tame wild Pals.");
+        
+        TextDisplay.TypeLine("\nProfessor Jon stumbles off, taking occasional swigs from his flask as he mutters about 'dimensional portal technology'.");
         
         // Ensure Nurse is at the Pal Center
         Map.AddNPC("Nurse", "Pal Center");

@@ -64,6 +64,8 @@ public static class States
                 Console.WriteLine("pet [pal] - Pet your Pal");
                 Console.WriteLine("inventory - Check your inventory");
                 Console.WriteLine("pals - Check your Pals");
+                Console.WriteLine("fight - Battle with a wild Pal");
+                Console.WriteLine("tame - Try to tame a wild Pal using Pal treats");
                 Console.WriteLine("help - Show these commands");
                 break;
                 
@@ -77,6 +79,7 @@ public static class States
                 Console.WriteLine("attack - Attack with your Pal");
                 Console.WriteLine("defend - Take a defensive stance");
                 Console.WriteLine("special - Use a special move");
+                Console.WriteLine("tame - Try to tame the wild Pal using treats");
                 Console.WriteLine("run - Try to escape from battle");
                 Console.WriteLine("pals - Check your Pals' stats");
                 Console.WriteLine("help - Show these commands");
