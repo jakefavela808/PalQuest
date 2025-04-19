@@ -111,8 +111,27 @@ public class Location
     
     public void AddNPC(NPC npc)
     {
-        Debugger.Write("Adding NPC " + npc.Name + " to " + name);
-        NPCs.Add(npc);
+        // Check if the NPC is already in this location to prevent duplicates
+        bool npcExists = false;
+        foreach (NPC existingNPC in NPCs)
+        {
+            if (existingNPC.Name == npc.Name)
+            {
+                npcExists = true;
+                break;
+            }
+        }
+        
+        // Only add the NPC if it doesn't already exist in this location
+        if (!npcExists)
+        {
+            Debugger.Write("Adding NPC " + npc.Name + " to " + name);
+            NPCs.Add(npc);
+        }
+        else
+        {
+            Debugger.Write("NPC " + npc.Name + " is already in " + name + ", skipping duplicate");
+        }
     }
     
     public bool HasNPC(NPC npcLookingFor)

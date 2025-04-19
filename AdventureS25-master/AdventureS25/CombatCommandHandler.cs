@@ -11,6 +11,8 @@ public static class CombatCommandHandler
             {"defend", Defend},
             {"special", Special},
             {"run", Run},
+            {"pals", ShowPals},
+            {"help", ShowHelp}
         };
     
     public static void Handle(Command command)
@@ -83,6 +85,50 @@ public static class CombatCommandHandler
         {
             TextDisplay.TypeLine("There's no active battle right now.");
             States.ChangeState(StateTypes.Exploring);
+        }
+    }
+    
+    // Shows available commands for battle
+    private static void ShowHelp(Command command)
+    {
+        TextDisplay.TypeLine("Here are the available commands for battle:");
+        States.ShowAvailableCommands();
+    }
+    
+    // Show the player's Pals and their stats during battle
+    private static void ShowPals(Command command)
+    {
+        List<Pal> playerPals = Pals.GetPlayerPals();
+        
+        if (playerPals.Count == 0)
+        {
+            TextDisplay.TypeLine("You don't have any Pals yet!");
+            return;
+        }
+        
+        TextDisplay.TypeLine("\n===== YOUR PALS =====\n");
+        
+        // First show the active battle Pal
+        if (PalBattle.IsBattleActive && PalBattle.PlayerPal != null)
+        {
+            TextDisplay.TypeLine("ACTIVE BATTLE PAL:");
+            TextDisplay.TypeLine($"{PalBattle.PlayerPal.Name} - Health: {PalBattle.PlayerPal.Health}/{PalBattle.PlayerPal.MaxHealth}");
+            TextDisplay.TypeLine($"Currently fighting {PalBattle.EnemyPal?.Name ?? "an unknown opponent"}");
+            TextDisplay.TypeLine("--------------------");
+        }
+        
+        // Then show all other Pals
+        foreach (Pal pal in playerPals)
+        {
+            // Skip detailed display of the active battle pal since we already showed it
+            if (PalBattle.IsBattleActive && PalBattle.PlayerPal != null && pal.Name == PalBattle.PlayerPal.Name)
+            {
+                continue;
+            }
+            
+            TextDisplay.TypeLine($"{pal.Name} - Health: {pal.Health}/{pal.MaxHealth}");
+            TextDisplay.TypeLine(pal.Description);
+            TextDisplay.TypeLine("--------------------");
         }
     }
 }

@@ -37,6 +37,8 @@ public static class PalBattle
     public static bool IsBattleActive { get; private set; } = false;
     public static bool IsPlayerTurn { get; private set; } = true;
     public static int TurnCount { get; private set; } = 0;
+    public static StateTypes PreviousStateType { get; private set; } = StateTypes.Exploring;
+    public static string LastOpponent { get; private set; } = string.Empty;
 
     private static readonly Random random = new Random();
 
@@ -48,12 +50,18 @@ public static class PalBattle
     
     public static void StartBattle(string playerPalName, string enemyPalName)
     {
+        // Store the current state before battle (will be either Exploring or Talking)
+        PreviousStateType = States.CurrentStateType;
+        
         // Get Pals from the Pals system
         PlayerPal = Pals.GetPalByName(playerPalName) ?? 
             throw new ArgumentException($"Player Pal '{playerPalName}' not found!");
             
         EnemyPal = Pals.GetPalByName(enemyPalName) ?? 
             throw new ArgumentException($"Enemy Pal '{enemyPalName}' not found!");
+            
+        // Store the enemy's name to identify post-battle context
+        LastOpponent = EnemyPal.Name;
         
         // Mark the Sandie Pal as owned by the player if it's in the battle
         if (playerPalName == "Sandie")
@@ -64,6 +72,9 @@ public static class PalBattle
         IsBattleActive = true;
         IsPlayerTurn = true;
         TurnCount = 0;
+        
+        // Change state to Fighting
+        States.ChangeState(StateTypes.Fighting);
         
         // Display battle intro
         TextDisplay.TypeLine($"\nA battle begins between {PlayerPal.Name} and {EnemyPal.Name}!");
@@ -96,11 +107,8 @@ public static class PalBattle
      ░");
         PlayerPal.DisplayInfo();
         
-        // First make sure we're not in conversation mode
-        if (States.CurrentStateType == StateTypes.Talking)
-        {
-            States.ChangeState(StateTypes.Exploring);
-        }
+        // Store the current state before switching to battle
+        PreviousStateType = States.CurrentStateType;
         
         // Then change to fighting state
         States.ChangeState(StateTypes.Fighting);
@@ -343,6 +351,8 @@ public static class PalBattle
         }
         
         Console.WriteLine(@"
++======================================================================================+
+
  ▄▄▄▄    ▄▄▄      ▄▄▄█████▓▄▄▄█████▓ ██▓    ▓█████     ▒█████   ██▒   █▓▓█████  ██▀███  
 ▓█████▄ ▒████▄    ▓  ██▒ ▓▒▓  ██▒ ▓▒▓██▒    ▓█   ▀    ▒██▒  ██▒▓██░   █▒▓█   ▀ ▓██ ▒ ██▒
 ▒██▒ ▄██▒██  ▀█▄  ▒ ▓██░ ▒░▒ ▓██░ ▒░▒██░    ▒███      ▒██░  ██▒ ▓██  █▒░▒███   ▓██ ░▄█ ▒
@@ -353,9 +363,19 @@ public static class PalBattle
  ░    ░   ░   ▒     ░        ░        ░ ░      ░      ░ ░ ░ ▒       ░░     ░     ░░   ░ 
  ░            ░  ░                      ░  ░   ░  ░       ░ ░        ░     ░  ░   ░     
       ░                                                             ░                   
-");
++======================================================================================+");
         
-        // Return to exploration state
-        States.ChangeState(StateTypes.Exploring);
+        // If the opponent was Morty (Professor Jon's Pal) and player won, return to conversation state
+        if (LastOpponent == "Morty" && playerWon)
+        {
+            // Return to talking with Professor Jon
+            States.ChangeState(StateTypes.Talking);
+            ConversationCommandHandler.PostBattleWithJon();
+        }
+        else
+        {
+            // Otherwise, return to the previous state
+            States.ChangeState(PreviousStateType);
+        }
     }
 }

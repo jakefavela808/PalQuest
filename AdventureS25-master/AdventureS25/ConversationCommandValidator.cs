@@ -4,12 +4,11 @@ public static class ConversationCommandValidator
 {
     public static bool IsValid(Command command)
     {
-        if (command.Verb == "y" || command.Verb == "n" ||
-            command.Verb == "leave")
+        if (command.Verb == "yes" || command.Verb == "no" || command.Verb == "help")
         {
             return true;
         }
-        TextDisplay.TypeLine("Valid commands are: y, n, leave");
+        TextDisplay.TypeLine("Valid options are: yes or no. Type 'help' to see available commands.");
         return false;
     }
 }

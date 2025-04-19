@@ -54,6 +54,10 @@ public static class Conditions
         // Add condition for having Sandie Pal
         Condition hasSandiePal = new Condition(ConditionTypes.HasSandiePal);
         Add(hasSandiePal);
+        
+        // Add condition for having spoken to Professor Jon
+        Condition hasSpokenToJon = new Condition(ConditionTypes.HasSpokenToJon);
+        Add(hasSpokenToJon);
     }   
     
     public static void ChangeCondition(ConditionTypes conditionType,

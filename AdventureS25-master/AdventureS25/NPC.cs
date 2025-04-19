@@ -41,4 +41,16 @@ public class NPC
         TextDisplay.TypeLine($"{name}");
         TextDisplay.TypeLine(description);
     }
+    
+    // Display only ASCII art and detailed description without the location description
+    // This is used during conversations to avoid repeating the location description
+    public void DisplayArtAndDescription()
+    {
+        if (!string.IsNullOrEmpty(asciiArt))
+        {
+            Console.WriteLine(asciiArt);
+        }
+        
+        TextDisplay.TypeLine(description);
+    }
 }

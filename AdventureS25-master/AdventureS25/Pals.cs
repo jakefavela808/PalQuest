@@ -16,7 +16,7 @@ public static class Pals
         // Create and register Sandie Pal
         Pal sandie = new Pal(
             "Sandie",
-            "A rare corgi-type Pal with quantum-computing capabilities. She's extremely affectionate and loyal.\n",
+            "A rare corgi-type Pal with quantum-computing capabilities. She's extremely affectionate and loyal.",
             @"
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢟⣛⣛⣛⣛⣛⣛⣛⣛⣛⡻⠿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⣛⣫⣥⠶⢛⣩⣭⣭⣭⣵⣶⣤⣍⠻⣿⣟⡻⢿⣶⣝⠻⣿⣿⣿⣿⣿⣿⣿

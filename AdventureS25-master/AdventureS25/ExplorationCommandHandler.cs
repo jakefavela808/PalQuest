@@ -21,13 +21,15 @@ public static class ExplorationCommandHandler
             {"drink", Drink},
             {"use", Use},
             {"pet", Pet},
+            {"pals", ShowPals},
             {"beerme", SpawnBeerInInventory},
             {"unbeerme", UnSpawnBeerInInventory},
             {"puke", Puke},
             {"tidyup", TidyUp},
             {"teleport", Teleport},
             {"connect", Connect},
-            {"disconnect", Disconnect}
+            {"disconnect", Disconnect},
+            {"help", ShowHelp}
         };
 
     private static void Disconnect(Command obj)
@@ -165,5 +167,34 @@ public static class ExplorationCommandHandler
     private static void Pet(Command command)
     {
         Player.Pet(command);
+    }
+    
+    // Shows available commands for the current state
+    private static void ShowHelp(Command command)
+    {
+        TextDisplay.TypeLine("Here are the available commands for your current state:");
+        States.ShowAvailableCommands();
+    }
+    
+    // Show the player's Pals and their stats
+    private static void ShowPals(Command command)
+    {
+        List<Pal> playerPals = Pals.GetPlayerPals();
+        
+        if (playerPals.Count == 0)
+        {
+            TextDisplay.TypeLine("You don't have any Pals yet!");
+            return;
+        }
+        
+        TextDisplay.TypeLine("\n===== YOUR PALS =====\n");
+        
+        foreach (Pal pal in playerPals)
+        {
+            TextDisplay.TypeLine($"{pal.Name} - Health: {pal.Health}/{pal.MaxHealth}");
+            TextDisplay.TypeLine(pal.Description);
+            Console.WriteLine(pal.AsciiArt);
+            TextDisplay.TypeLine("--------------------");
+        }
     }
 }

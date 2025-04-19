@@ -24,7 +24,7 @@ public static class Player
         if (CurrentLocation.CanMoveInDirection(command))
         {
             CurrentLocation = CurrentLocation.GetLocationInDirection(command);
-            Console.WriteLine(CurrentLocation.GetDescription());
+            Look(); // Use the Look method to display location without double NPCs
         }
         else
         {
@@ -82,7 +82,43 @@ public static class Player
 
     public static void Look()
     {
-        Console.WriteLine(CurrentLocation.GetDescription());
+        // Always show available commands first before any ASCII art or other content
+        States.ShowAvailableCommands();
+        
+        // Print location description
+        Console.WriteLine(CurrentLocation.Description);
+        
+        // List items in the location
+        foreach (Item item in CurrentLocation.Items)
+        {
+            Console.WriteLine(item.GetLocationDescription());
+        }
+        
+        // List NPCs in the location once
+        foreach (NPC npc in CurrentLocation.NPCs)
+        {
+            // Only display location description, not the ASCII art here
+            Console.WriteLine(npc.GetLocationDescription());
+        }
+        
+        // Add available directions
+        if (CurrentLocation.Connections.Count > 0)
+        {
+            Console.WriteLine("\nPossible directions: ");
+            
+            // Create and add descriptions for each direction
+            foreach (var connection in CurrentLocation.Connections)
+            {
+                string direction = connection.Key;
+                
+                // Capitalize the first letter of the direction
+                direction = char.ToUpper(direction[0]) + direction.Substring(1);
+                
+                string locationName = connection.Value.Name;
+                Console.Write(direction + " [" + locationName + "] ");
+            }
+            Console.WriteLine();
+        }
     }
 
     public static void Drop(Command command)
@@ -174,7 +210,9 @@ public static class Player
     private static void StartConversationWith(NPC npc)
     {
         TextDisplay.TypeLine("You approach " + npc.Name + ".");
-        States.ChangeState(StateTypes.Talking);
+        
+        // Don't change state here, let the ConversationCommandHandler handle it
+        // This prevents double-printing of available commands
         ConversationCommandHandler.StartConversation(npc);
     }
 
@@ -227,7 +265,7 @@ public static class Player
         // Handle different items
         if (itemName == "note")
         {
-            TextDisplay.TypeLine("Dear Adventurer,\nHey y-you, whatever your name is!\n\nListen up fucker! I heard you're trying to become some kind of Pal Tamer or whatever. GOOD NEWS! I'm gonna help you not completely suck at it! I've been studying this AMAZING new Pal specimen that's perfect for beginners.\n\nGet your ass over to my Fusion Lab ASAP!!! Don't make me come find you, because I WILL, and you WON'T like it! This is important COMPUTER SCIENCE happening here!\n\nWubba lubba dub dub!\nProf. Jon (the smartest Computer Scientist in this dimension)\n\nP.S. If anyone asks, you never saw this note. THE GOVERNMENT IS WATCHING.\n");
+            TextDisplay.TypeLine("\nDear Adventurer,\nHey y-you, whatever your name is!\n\nListen up fucker! I heard you're trying to become some kind of Pal Tamer or whatever. GOOD NEWS! I'm gonna help you not completely suck at it! I've been studying this AMAZING new Pal specimen that's perfect for beginners.\n\nGet your ass over to my Fusion Lab ASAP!!! Don't make me come find you, because I WILL, and you WON'T like it! This is important COMPUTER SCIENCE happening here!\n\nSincerely, \nProf. Jon (the smartest Computer Scientist in this dimension)\n\nP.S. If anyone asks, you never saw this note. THE GOVERNMENT IS WATCHING.\n");
             
             // Set the ReadJonNote condition
             Conditions.ChangeCondition(ConditionTypes.ReadJonNote, true);
@@ -244,24 +282,45 @@ public static class Player
     
     public static void Pet(Command command)
     {
-        // Check if player has Sandie
-        if (!Conditions.IsTrue(ConditionTypes.HasSandiePal))
+        // Get all player's Pals
+        List<Pal> playerPals = Pals.GetPlayerPals();
+        
+        // Check if player has any Pals
+        if (playerPals.Count == 0)
         {
-            TextDisplay.TypeLine("You don't have a Pal to pet right now.");
+            TextDisplay.TypeLine("You don't have any Pals to pet yet.");
             return;
         }
         
         // Check if a specific Pal was specified
         string palName = command.Noun?.ToLower() ?? string.Empty;
         
-        if (!string.IsNullOrEmpty(palName) && palName != "sandie")
+        // If no Pal name was specified
+        if (string.IsNullOrEmpty(palName))
+        {
+            TextDisplay.TypeLine("Which Pal would you like to pet? Try 'pet [pal name]'.");
+            return;
+        }
+        
+        // Check if the player has the Pal they're trying to pet
+        Pal? palToPet = null;
+        foreach (Pal pal in playerPals)
+        {
+            if (pal.Name.ToLower() == palName)
+            {
+                palToPet = pal;
+                break;
+            }
+        }
+        
+        if (palToPet == null)
         {
             TextDisplay.TypeLine("You don't have a Pal named " + palName + ".");
             return;
         }
         
-        // Display ASCII art (placeholder - you'll replace this)
-        TextDisplay.TypeLine("You pet Sandie. She looks very happy!");
+        // Display petting message
+        TextDisplay.TypeLine($"You pet {palToPet.Name}. They look very happy!");
         
         // Placeholder for ASCII art - will be replaced by the user
         Console.WriteLine(@"

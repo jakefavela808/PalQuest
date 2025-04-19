@@ -13,4 +13,5 @@ public enum ConditionTypes
     IsRemovedConnection,
     ReadJonNote,
     HasSandiePal,
+    HasSpokenToJon,
 }
