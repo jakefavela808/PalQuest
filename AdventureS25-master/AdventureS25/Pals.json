@@ -1,0 +1,11 @@
+{
+  "Pals": [
+    {
+      "Name": "Sandie",
+      "Description": "A friendly sand golem with a big smile.",
+      "InitialDescription": "Sandie is here, waving at you cheerfully.",
+      "IsAcquirable": true,
+      "Location": "Entrance"
+    }
+  ]
+}

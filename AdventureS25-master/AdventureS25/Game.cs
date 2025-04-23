@@ -34,6 +34,8 @@ public static class Game
         Conditions.Initialize();
         States.Initialize();
         Map.Initialize();
+        NPCs.Initialize();
+        Pals.Initialize();
         Items.Initialize();
         Player.Initialize();
     }

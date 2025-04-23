@@ -1,0 +1,11 @@
+{
+  "NPCs": [
+    {
+      "Name": "Old Man",
+      "Description": "A wise old man with a long beard.",
+      "InitialDescription": "An old man stands here, stroking his beard thoughtfully.",
+      "IsInteractable": true,
+      "Location": "Entrance"
+    }
+  ]
+}

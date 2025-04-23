@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 
 namespace AdventureS25;
 
@@ -10,6 +10,8 @@ public static class Map
     
     public static void Initialize()
     {
+        Pals.Initialize();
+        NPCs.Initialize();
         string path = Path.Combine(Environment.CurrentDirectory, "Map.json");
         string rawText = File.ReadAllText(path);
         
@@ -71,6 +73,26 @@ public static class Map
         if (item != null && location != null)
         {
             location.AddItem(item);
+        }
+    }
+
+    public static void AddPal(string palName, string locationName)
+    {
+        Location location = GetLocationByName(locationName);
+        Pal pal = Pals.GetPalByName(palName);
+        if (pal != null && location != null)
+        {
+            location.AddPal(pal);
+        }
+    }
+
+    public static void AddNPC(string npcName, string locationName)
+    {
+        Location location = GetLocationByName(locationName);
+        NPC npc = NPCs.GetNPCByName(npcName);
+        if (npc != null && location != null)
+        {
+            location.AddNPC(npc);
         }
     }
     
