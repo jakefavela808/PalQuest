@@ -110,6 +110,11 @@ public static class ExplorationCommandHandler
 
     public static void Handle(Command command)
     {
+        if (command.Verb == "pals")
+        {
+            Player.ShowCaughtPals();
+            return;
+        }
         if (commandMap.ContainsKey(command.Verb))
         {
             Action<Command> method = commandMap[command.Verb];

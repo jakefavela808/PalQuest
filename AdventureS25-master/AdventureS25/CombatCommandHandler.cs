@@ -1,7 +1,9 @@
-﻿namespace AdventureS25;
+namespace AdventureS25;
 
 public static class CombatCommandHandler
 {
+    public static Battle CurrentBattle { get; set; }
+
     private static Dictionary<string, Action<Command>> commandMap =
         new Dictionary<string, Action<Command>>()
         {
@@ -24,32 +26,50 @@ public static class CombatCommandHandler
 
     private static void BasicAttack(Command command)
     {
-        Console.WriteLine("You use a basic attack");
+        if (CurrentBattle != null)
+            CurrentBattle.PlayerAttack();
     }
     
     private static void SpecialAttack(Command command)
     {
-        Console.WriteLine("You use a special attack");
+        if (CurrentBattle != null)
+            CurrentBattle.PlayerSpecialAttack();
     }
     
     private static void Defend(Command command)
     {
-        Console.WriteLine("You defend it in the face parts");
+        if (CurrentBattle != null)
+            CurrentBattle.PlayerDefend();
     }
 
     private static void Potion(Command command)
     {
-        Console.WriteLine("You quaff the potion parts");
+        if (CurrentBattle != null)
+            CurrentBattle.PlayerPotion();
     }
 
     private static void Tame(Command command)
     {
-        Console.WriteLine("You tame the Pal");
+        if (CurrentBattle != null)
+            CurrentBattle.PlayerTame();
     }
     
     private static void Run(Command command)
     {
-        Console.WriteLine("You flee");
-        States.ChangeState(StateTypes.Exploring);
+        // 45% chance to escape
+        if (CurrentBattle != null)
+        {
+            Random rng = new Random();
+            if (rng.NextDouble() < 0.45)
+            {
+                Console.WriteLine("You successfully escaped!");
+                States.ChangeState(StateTypes.Exploring);
+            }
+            else
+            {
+                Console.WriteLine("You tried to run, but couldn't escape!");
+                CurrentBattle.State = BattleState.PalTurn;
+            }
+        }
     }
 }

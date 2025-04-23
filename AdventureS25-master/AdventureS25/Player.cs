@@ -2,6 +2,26 @@ namespace AdventureS25;
 
 public static class Player
 {
+    // ...
+    public static void ShowCaughtPals()
+    {
+        if (CaughtPals.Count == 0)
+        {
+            Console.WriteLine("You haven't caught any Pals yet.");
+            return;
+        }
+        Console.WriteLine("Your caught Pals:");
+        foreach (var pal in CaughtPals)
+        {
+            Console.WriteLine($"\n=== {pal.Name} ===");
+            if (!string.IsNullOrWhiteSpace(pal.AsciiArt))
+                Console.WriteLine(pal.AsciiArt);
+            Console.WriteLine($"Description: {pal.Description}");
+            Console.WriteLine($"Stats: HP 30, ATK 10, DEF 8 (example)");
+            Console.WriteLine($"Moves: Tackle, Growl (example)");
+        }
+    }
+    public static List<Pal> CaughtPals = new List<Pal>();
     public static Location CurrentLocation;
     public static List<Item> Inventory;
 
@@ -163,6 +183,62 @@ public static class Player
                 Console.WriteLine(pal.Description);
             }
             States.ChangeState(StateTypes.Fighting);
+
+            // Start the battle
+            var battle = new Battle(pal);
+            battle.StartBattle();
+            // Set the current battle context for the handler
+            CombatCommandHandler.CurrentBattle = battle;
+            while (battle.State != BattleState.Won && battle.State != BattleState.Lost)
+            {
+                if (battle.State == BattleState.PlayerTurn)
+                {
+                    Console.Write("> ");
+                    string input = Console.ReadLine()?.Trim().ToLower();
+                    Command combatCommand = new Command();
+                    combatCommand.Verb = input;
+                    if (CombatCommandValidator.IsValid(combatCommand))
+                    {
+                        CombatCommandHandler.Handle(combatCommand);
+                        // Tame can win instantly, so check for win
+                        if (battle.State == BattleState.Won)
+                        {
+                            Console.WriteLine($"You tamed {pal.Name}! {pal.Name} is now your Pal.");
+                            CurrentLocation.Pals.Remove(pal);
+                            States.ChangeState(StateTypes.Exploring);
+                            return;
+                        }
+                        // Run can escape, so check for exploring state
+                        if (States.CurrentStateType == StateTypes.Exploring)
+                        {
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid command. Valid commands are: basic, special, defend, potion, tame, run.");
+                    }
+                }
+                else if (battle.State == BattleState.PalTurn)
+                {
+                    battle.PalAttack();
+                }
+            }
+            if (battle.State == BattleState.Won)
+            {
+                Console.WriteLine($"You caught {pal.Name}! {pal.Name} is now your Pal.");
+                if (!CaughtPals.Contains(pal))
+                {
+                    CaughtPals.Add(pal);
+                    if (!string.IsNullOrWhiteSpace(pal.AsciiArt))
+                    {
+                        Console.WriteLine($"\n{pal.AsciiArt}\n");
+                    }
+                    Console.WriteLine(pal.Description);
+                }
+                CurrentLocation.Pals.Remove(pal);
+            }
+            States.ChangeState(StateTypes.Exploring);
         }
         else
         {
