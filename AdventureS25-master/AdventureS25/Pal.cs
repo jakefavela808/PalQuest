@@ -2,18 +2,20 @@ namespace AdventureS25;
 
 public class Pal
 {
+    public string AsciiArt { get; private set; }
     public string Name { get; private set; }
     public string Description { get; private set; }
     public string InitialDescription { get; private set; }
     public bool IsAcquirable { get; private set; }
     public bool HasBeenAcquired { get; private set; }
 
-    public Pal(string name, string description, string initialDescription, bool isAcquirable = true)
+    public Pal(string name, string description, string initialDescription, bool isAcquirable = true, string asciiArt = "")
     {
         Name = name;
         Description = description;
         InitialDescription = initialDescription;
         IsAcquirable = isAcquirable;
+        AsciiArt = asciiArt;
     }
 
     public void Acquire()
@@ -23,10 +25,11 @@ public class Pal
 
     public string GetWorldDescription()
     {
+        string art = string.IsNullOrEmpty(AsciiArt) ? "" : $"\n{AsciiArt}\n";
         if (HasBeenAcquired)
         {
-            return $"You have acquired {Name}.";
+            return $"{art}You have acquired {Name}.";
         }
-        return InitialDescription;
+        return art + InitialDescription;
     }
 }

@@ -1,45 +1,25 @@
 ﻿{
   "Locations": [
     {
-      "Name": "Entrance",
-      "Description": "This is the entrance room. Everything starts here.",
-      "Connections": {
-        "east" : "Storage",
-        "north": "Throne Room",
-        "west" : "Pool"
-      }
+      "Name": "Pallet Town",
+      "Description": "A small town with a few houses and Professor Oak's Lab.",
+      "Connections": {"north": "Route 1", "east": "Oak's Lab"}
     },
-    
     {
-      "Name": "Storage",
-      "Description": "You are in a small storage room. There are lots of things.",
-      "Connections": {
-        "west" : "Entrance"
-      }    
+      "Name": "Oak's Lab",
+      "Description": "Professor Oak's famous laboratory, filled with Pokémon research equipment.",
+      "Connections": {"west": "Pallet Town"}
     },
-
     {
-      "Name": "Throne Room",
-      "Description": "There is a big ass throne here.",
-      "Connections": {
-        "south" : "Entrance"
-      }
+      "Name": "Route 1",
+      "Description": "A grassy path connecting Pallet Town and Viridian City. Wild Pokémon can be found here!",
+      "Connections": {"south": "Pallet Town", "north": "Viridian City"}
     },
-
     {
-      "Name": "Pool",
-      "Description": "It's very very wet here.",
-      "Connections": {
-        "east" : "Entrance"
-      }
-    },
-
-    {
-      "Name": "Cave",
-      "Description": "It's a dark cave.",
-      "Connections": {
-      }
+      "Name": "Viridian City",
+      "Description": "A bustling city with a Pokémon Center and Poké Mart.",
+      "Connections": {"south": "Route 1"}
     }
   ],
-  "StartLocation": "Entrance"
+  "StartLocation": "Pallet Town"
 }

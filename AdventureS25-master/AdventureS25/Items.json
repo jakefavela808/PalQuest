@@ -1,53 +1,26 @@
 {
   "Items": [
     {
-      "Name": "sword",
-      "Description": "long sword",
-      "InitialDescription": "There is a long sword stuck in a rock here.",
+      "Name": "Poké Ball",
+      "Description": "A device for catching wild Pokémon.",
+      "InitialDescription": "A Poké Ball lies on the ground, ready to be used.",
       "IsTakeable": true,
-      "Location": "Entrance"
+      "Location": "Pallet Town"
     },
     {
-      "Name": "donut",
-      "Description": "A giant concrete donut that you can't take",
-      "InitialDescription": "A giant concrete donut rests on the floor.",
-      "IsTakeable": false,
-      "Location": "Storage"
+      "Name": "Potion",
+      "Description": "A spray-type medicine for treating wounds. It restores the HP of one Pokémon by 20 points.",
+      "InitialDescription": "A Potion sits here, perfect for healing your Pokémon.",
+      "IsTakeable": true,
+      "Location": "Viridian City"
     },
     {
-      "Name": "beer",
-      "Description": "beer's beer",
-      "InitialDescription": "There is a beer's beer in a beer here.",
+      "Name": "Town Map",
+      "Description": "A convenient map for trainers to navigate the region.",
+      "InitialDescription": "A Town Map is pinned to a signpost.",
       "IsTakeable": true,
-      "Location": "Throne Room"
-    },
-    {
-      "Name": "beer-bottle",
-      "Description": "An empty beer bottle",
-      "InitialDescription": "There is an empty beer bottle in a beer here.",
-      "IsTakeable": true,
-      "Location": "Storage"
-    },
-    {
-      "Name": "apple",
-      "Description": "a shiny rotten apple",
-      "InitialDescription": "A shiny rotten apple sits on the floor.",
-      "IsTakeable": true,
-      "Location": "Entrance"
-    },
-    {
-      "Name": "spear",
-      "Description": "a shiny rotten spear",
-      "InitialDescription": "A shiny rotten spear sits is propped in the corner.",
-      "IsTakeable": true,
-      "Location": "Entrance"
-    },
-    {
-      "Name": "puke",
-      "Description": "some puke",
-      "InitialDescription": "A disgusting pile of puke.",
-      "IsTakeable": true,
-      "Location": "Throne Room"
+      "Location": "Pallet Town"
     }
   ]
 }
+

@@ -1,11 +1,28 @@
 {
   "Pals": [
     {
-      "Name": "Sandie",
-      "Description": "A friendly sand golem with a big smile.",
-      "InitialDescription": "Sandie is here, waving at you cheerfully.",
+      "Name": "Pikachu",
+      "Description": "A small, yellow mouse Pokémon with electric cheeks.",
+      "InitialDescription": "A wild Pikachu is here, its tail crackling with electricity!",
       "IsAcquirable": true,
-      "Location": "Entrance"
+      "Location": "Route 1",
+      "AsciiArt": "  (\\`-\\')\n ( o o )\n  (  v  )\n   \"\"\"\""
+    },
+    {
+      "Name": "Bulbasaur",
+      "Description": "A seed Pokémon with a bulb on its back.",
+      "InitialDescription": "Bulbasaur is here, looking ready to join a trainer!",
+      "IsAcquirable": true,
+      "Location": "Oak's Lab",
+      "AsciiArt": "  /\\^/\\ \\n ( o.o )\n  > ^ <"
+    },
+    {
+      "Name": "Pidgey",
+      "Description": "A tiny bird Pokémon that is common in grassy areas.",
+      "InitialDescription": "A Pidgey flutters nearby, pecking at the ground.",
+      "IsAcquirable": true,
+      "Location": "Route 1",
+      "AsciiArt": "  ('v')\n  (( ))\n   ^^ ^^"
     }
   ]
 }
