@@ -7,7 +7,8 @@
       "IsInteractable": true,
       "Location": "Oak's Lab",
       "Dialogue": "Welcome to the world of Pokémon! Here, take this Pokédex and choose your starter.",
-      "AsciiArt": "  ____\n /    \\__\n|  o  o  |\n|   --   |\n \\______/"
+      "AsciiArt": "  ____\n /    \\__\n|  o  o  |\n|   --   |\n \\______/",
+      "Quests": ["Get Your Starter!"]
     },
     {
       "Name": "Nurse Joy",
@@ -25,7 +26,8 @@
       "IsInteractable": true,
       "Location": "Route 1",
       "Dialogue": "My Rattata is in the top percentage of Rattata! Let's battle!",
-      "AsciiArt": "  o\n /|\\\n / \\\n"
+      "AsciiArt": "  o\n /|\\\n / \\\n",
+      "Quests": ["Defeat Youngster Joey!"]
     }
   ]
 }

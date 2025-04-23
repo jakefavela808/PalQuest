@@ -9,6 +9,7 @@ public class Quest
     public string Reward { get; private set; }
     public List<string> Objectives { get; private set; }
     public string Location { get; private set; }
+    public bool Completed { get; private set; } = false;
 
     public Quest(string name, string description, string initialDescription, bool isRepeatable, string reward, List<string> objectives, string location)
     {
@@ -19,5 +20,15 @@ public class Quest
         Reward = reward;
         Objectives = objectives;
         Location = location;
+    }
+
+    public void Complete()
+    {
+        Completed = true;
+    }
+
+    public bool IsComplete()
+    {
+        return Completed;
     }
 }

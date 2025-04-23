@@ -14,12 +14,24 @@ public static class NPCs
         NPCsJsonData data = JsonSerializer.Deserialize<NPCsJsonData>(rawText);
         foreach (NPCJsonData npcData in data.NPCs)
         {
+            List<Quest> quests = new List<Quest>();
+            if (npcData.Quests != null)
+            {
+                foreach (var questName in npcData.Quests)
+                {
+                    var quest = Quests.GetQuestByName(questName);
+                    if (quest != null)
+                        quests.Add(quest);
+                }
+            }
             NPC npc = new NPC(
                 npcData.Name,
                 npcData.Description,
                 npcData.InitialDescription,
                 npcData.IsInteractable,
-                npcData.Dialogue
+                npcData.Dialogue,
+                npcData.AsciiArt,
+                quests
             );
             nameToNPC.Add(npc.Name, npc);
             Map.AddNPC(npc.Name, npcData.Location);

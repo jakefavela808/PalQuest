@@ -2,6 +2,137 @@ namespace AdventureS25;
 
 public static class Player
 {
+    public static List<Quest> ActiveQuests = new List<Quest>();
+    public static List<Quest> DeclinedQuests = new List<Quest>();
+    public static List<Quest> CompletedQuests = new List<Quest>();
+
+    public static void OfferQuest(Quest quest)
+    {
+        if (ActiveQuests.Contains(quest) || DeclinedQuests.Contains(quest))
+            return;
+        Console.WriteLine($"\n=== Quest Offer ===");
+        Console.WriteLine($"Quest: {quest.Name}");
+        Console.WriteLine($"{quest.Description}");
+        Console.WriteLine("Do you want to accept this quest? (yes/no)");
+        States.ChangeState(StateTypes.Talking);
+        PendingQuestOffer = quest;
+    }
+
+    public static Quest PendingQuestOffer = null;
+
+    public static void AcceptQuest()
+    {
+        if (PendingQuestOffer != null)
+        {
+            ReceiveQuest(PendingQuestOffer);
+            PendingQuestOffer = null;
+        }
+    }
+
+    public static void DeclineQuest()
+    {
+        if (PendingQuestOffer != null)
+        {
+            DeclinedQuests.Add(PendingQuestOffer);
+            Console.WriteLine($"You declined the quest: {PendingQuestOffer.Name}");
+            PendingQuestOffer = null;
+        }
+    }
+
+    public static void ReceiveQuest(Quest quest)
+    {
+        if (!ActiveQuests.Contains(quest))
+        {
+            ActiveQuests.Add(quest);
+            Console.WriteLine("\n=== New Quest Accepted! ===");
+            Console.WriteLine($"Quest: {quest.Name}");
+            Console.WriteLine($"{quest.Description}\n");
+        }
+    }
+
+    public static void CompleteQuest(Quest quest)
+    {
+        if (ActiveQuests.Contains(quest) && !quest.IsComplete())
+        {
+            quest.Complete();
+            ActiveQuests.Remove(quest);
+            CompletedQuests.Add(quest);
+            Console.WriteLine($"\n=== Quest Completed! ===");
+            Console.WriteLine($"Quest: {quest.Name}");
+            Console.WriteLine($"Reward: {quest.Reward}");
+            GrantReward(quest.Reward);
+        }
+    }
+
+    public static void ShowActiveQuests()
+    {
+        if (ActiveQuests.Count == 0)
+        {
+            Console.WriteLine("No active quests.");
+            return;
+        }
+        Console.WriteLine("=== Active Quests ===");
+        foreach (var quest in ActiveQuests)
+        {
+            Console.WriteLine($"\nQuest: {quest.Name}");
+            Console.WriteLine($"Description: {quest.Description}");
+            if (quest.Objectives != null && quest.Objectives.Count > 0)
+            {
+                Console.WriteLine("Objectives:");
+                foreach (var obj in quest.Objectives)
+                    Console.WriteLine($"- {obj}");
+            }
+        }
+    }
+
+    public static void ShowCompletedQuests()
+    {
+        if (CompletedQuests.Count == 0)
+        {
+            Console.WriteLine("No completed quests.");
+            return;
+        }
+        Console.WriteLine("=== Completed Quests ===");
+        foreach (var quest in CompletedQuests)
+        {
+            Console.WriteLine($"\nQuest: {quest.Name}");
+            Console.WriteLine($"Description: {quest.Description}");
+            if (quest.Objectives != null && quest.Objectives.Count > 0)
+            {
+                Console.WriteLine("Objectives:");
+                foreach (var obj in quest.Objectives)
+                    Console.WriteLine($"- {obj}");
+            }
+            Console.WriteLine($"Reward: {quest.Reward}");
+        }
+    }
+
+    public static void GrantReward(string reward)
+    {
+        if (string.IsNullOrWhiteSpace(reward))
+            return;
+        // Try to match an item in the Items database (pseudo-code, adapt as needed)
+        var item = Items.GetItemByName(reward);
+        if (item != null)
+        {
+            Inventory.Add(item);
+            Console.WriteLine($"You received: {item.Name}");
+        }
+        else if (reward.ToLower().EndsWith("xp"))
+        {
+            // Example: "100 XP"
+            var parts = reward.Split(' ');
+            if (parts.Length > 0 && int.TryParse(parts[0], out int xp))
+            {
+                // Add XP to player (implement XP system as needed)
+                Console.WriteLine($"You gained {xp} XP!");
+            }
+        }
+        else
+        {
+            Console.WriteLine($"Reward: {reward}");
+        }
+    }
     // ...
     public static void ShowCaughtPals()
     {
@@ -159,10 +290,27 @@ public static class Player
             NPC npc = CurrentLocation.NPCs[0];
             npc.Interact();
             Console.WriteLine($"You talk to {npc.Name}.");
+            if (!string.IsNullOrWhiteSpace(npc.AsciiArt))
+            {
+                Console.WriteLine(npc.AsciiArt);
+            }
             Console.WriteLine(npc.Description);
             if (!string.IsNullOrWhiteSpace(npc.Dialogue))
             {
                 Console.WriteLine(npc.Dialogue);
+            }
+            npc.OfferQuests();
+            // Complete 'Get Your Starter!' quest after talking to Professor Oak
+            foreach (var quest in ActiveQuests.ToList())
+            {
+                if (npc.Name.ToLower().Contains("oak") && quest.Name == "Get Your Starter!" && !quest.IsComplete())
+                {
+                    CompleteQuest(quest);
+                }
+                if (npc.Name.ToLower().Contains("joey") && quest.Name == "Defeat Youngster Joey!" && !quest.IsComplete())
+                {
+                    CompleteQuest(quest);
+                }
             }
             States.ChangeState(StateTypes.Talking);
         }
@@ -235,6 +383,19 @@ public static class Player
                         Console.WriteLine($"\n{pal.AsciiArt}\n");
                     }
                     Console.WriteLine(pal.Description);
+                    // Offer Pikachu quest if catching Pikachu
+                    if (pal.Name.ToLower().Contains("pikachu"))
+                    {
+                        var pikachuQuest = Quests.GetQuestByName("Catch a Pikachu!");
+                        if (pikachuQuest != null)
+                            OfferQuest(pikachuQuest);
+                        // Complete 'Catch a Pikachu!' quest if active
+                        foreach (var quest in ActiveQuests.ToList())
+                        {
+                            if (quest.Name == "Catch a Pikachu!" && !quest.IsComplete())
+                                CompleteQuest(quest);
+                        }
+                    }
                 }
                 CurrentLocation.Pals.Remove(pal);
             }

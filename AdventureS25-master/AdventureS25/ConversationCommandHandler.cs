@@ -1,12 +1,15 @@
-﻿namespace AdventureS25;
+namespace AdventureS25;
 
 public static class ConversationCommandHandler
 {
     private static Dictionary<string, Action<Command>> commandMap =
         new Dictionary<string, Action<Command>>()
         {
+            {"talk", Player.Talk},
             {"yes", Yes},
             {"no", No},
+            {"quests", _ => Player.ShowActiveQuests()},
+            {"completed", _ => Player.ShowCompletedQuests()},
             {"leave", Leave},
         };
     
@@ -21,12 +24,26 @@ public static class ConversationCommandHandler
 
     private static void Yes(Command command)
     {
-        Console.WriteLine("You agreed");
+        if (Player.PendingQuestOffer != null)
+        {
+            Player.AcceptQuest();
+        }
+        else
+        {
+            Console.WriteLine("You agreed");
+        }
     }
     
     private static void No(Command command)
     {
-        Console.WriteLine("You are disagreed");
+        if (Player.PendingQuestOffer != null)
+        {
+            Player.DeclineQuest();
+        }
+        else
+        {
+            Console.WriteLine("You are disagreed");
+        }
     }
 
     private static void Leave(Command command)
