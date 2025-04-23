@@ -25,11 +25,10 @@ public class Pal
 
     public string GetWorldDescription()
     {
-        string art = string.IsNullOrEmpty(AsciiArt) ? "" : $"\n{AsciiArt}\n";
         if (HasBeenAcquired)
         {
-            return $"{art}You have acquired {Name}.";
+            return $"You have acquired {Name}.";
         }
-        return art + InitialDescription;
+        return Description;
     }
 }

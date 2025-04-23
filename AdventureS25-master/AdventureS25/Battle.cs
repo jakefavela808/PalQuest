@@ -14,10 +14,14 @@ namespace AdventureS25
         private bool defendActive = false;
         private int potions = 1;
 
+        private bool easierToTameAnnounced = false;
+        private double catchChance = 0.3;
+        private int maxOpponentHP = 30;
+
         public Battle(Pal opponent)
         {
             Opponent = opponent;
-            OpponentHP = 30;
+            OpponentHP = maxOpponentHP;
             PlayerHP = 30;
             State = BattleState.Start;
         }
@@ -25,11 +29,36 @@ namespace AdventureS25
         public void StartBattle()
         {
             State = BattleState.PlayerTurn;
-            Console.WriteLine($"You face off against {Opponent.Name}!");
-            if (!string.IsNullOrWhiteSpace(Opponent.AsciiArt))
-                Console.WriteLine(Opponent.AsciiArt);
-            Console.WriteLine($"{Opponent.Name} HP: {OpponentHP}");
-            Console.WriteLine($"Your HP: {PlayerHP}");
+            Console.WriteLine("\n============================");
+            Console.WriteLine("A battle is about to begin!");
+
+            // Get player's active Pal (first in CaughtPals) or fallback to 'You'
+            var playerPal = Player.CaughtPals != null && Player.CaughtPals.Count > 0 ? Player.CaughtPals[0] : null;
+            string playerName = playerPal != null ? playerPal.Name : "You";
+            string playerArt = playerPal != null && !string.IsNullOrWhiteSpace(playerPal.AsciiArt) ? playerPal.AsciiArt : "";
+            string playerDesc = playerPal != null ? playerPal.Description : "A brave trainer ready for battle!";
+            string playerStats = $"HP {PlayerHP}  ATK 10  DEF 8 (example)";
+
+            // Opponent info
+            string oppName = Opponent.Name;
+            string oppArt = !string.IsNullOrWhiteSpace(Opponent.AsciiArt) ? Opponent.AsciiArt : "";
+            string oppDesc = !string.IsNullOrWhiteSpace(Opponent.Description) ? Opponent.Description : "A wild opponent appears!";
+            string oppStats = $"HP {OpponentHP}  ATK 10  DEF 8 (example)";
+
+            // Print player Pal info
+            Console.WriteLine($"{playerName}");
+            if (!string.IsNullOrWhiteSpace(playerArt))
+                Console.WriteLine(playerArt);
+            Console.WriteLine($"{playerDesc}");
+            Console.WriteLine($"{playerStats}");
+            Console.WriteLine("\n==================== VS ====================\n");
+            // Print opponent Pal info
+            Console.WriteLine($"{oppName}");
+            if (!string.IsNullOrWhiteSpace(oppArt))
+                Console.WriteLine(oppArt);
+            Console.WriteLine($"{oppDesc}");
+            Console.WriteLine($"{oppStats}");
+            Console.WriteLine("\n============================================\n");
             Console.WriteLine("Type 'basic', 'special', 'defend', 'potion', 'tame', or 'run'.");
         }
 
@@ -38,6 +67,7 @@ namespace AdventureS25
             int damage = new Random().Next(6, 12);
             OpponentHP -= damage;
             Console.WriteLine($"You attack {Opponent.Name} for {damage} damage!");
+            CheckEasierToTame();
             if (OpponentHP <= 0)
             {
                 State = BattleState.Won;
@@ -52,6 +82,7 @@ namespace AdventureS25
             int damage = new Random().Next(10, 18);
             OpponentHP -= damage;
             Console.WriteLine($"You use a special attack on {Opponent.Name} for {damage} damage!");
+            CheckEasierToTame();
             if (OpponentHP <= 0)
             {
                 State = BattleState.Won;
@@ -86,9 +117,9 @@ namespace AdventureS25
 
         public void PlayerTame()
         {
-            // 30% chance to tame instantly
+            // Variable chance to tame, increased if OpponentHP < 50% and message shown
             Random rng = new Random();
-            if (rng.NextDouble() < 0.3)
+            if (rng.NextDouble() < catchChance)
             {
                 State = BattleState.Won;
                 Console.WriteLine($"You tamed {Opponent.Name}!");
@@ -97,6 +128,22 @@ namespace AdventureS25
             {
                 Console.WriteLine($"You tried to tame {Opponent.Name}, but it resisted!");
                 State = BattleState.PalTurn;
+            }
+        }
+
+        private void CheckEasierToTame()
+        {
+            // Only trigger if below 50% and not already announced
+            if (!easierToTameAnnounced && OpponentHP < (maxOpponentHP / 2))
+            {
+                catchChance += 0.25; // Increase by 25%
+                easierToTameAnnounced = true;
+                Console.WriteLine($"{Opponent.Name} has weakened and is easier to tame!");
+            }
+            // If OpponentHP goes above 50% again, reset flag so message can show again if it drops again
+            else if (easierToTameAnnounced && OpponentHP >= (maxOpponentHP / 2))
+            {
+                easierToTameAnnounced = false;
             }
         }
 

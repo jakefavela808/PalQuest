@@ -7,4 +7,5 @@ public class PalJsonData
     public string InitialDescription { get; set; }
     public bool IsAcquirable { get; set; }
     public string Location { get; set; }
+    public string AsciiArt { get; set; }
 }

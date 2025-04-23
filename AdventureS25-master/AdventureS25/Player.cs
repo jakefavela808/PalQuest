@@ -5,6 +5,23 @@ public static class Player
     public static List<Quest> ActiveQuests = new List<Quest>();
     public static List<Quest> DeclinedQuests = new List<Quest>();
     public static List<Quest> CompletedQuests = new List<Quest>();
+    public static void AddPal(Pal pal)
+    {
+        if (pal != null && !CaughtPals.Contains(pal))
+        {
+            CaughtPals.Add(pal);
+            pal.Acquire();
+            if (!string.IsNullOrWhiteSpace(pal.AsciiArt))
+            {
+                Console.WriteLine($"\n{pal.AsciiArt}\n");
+            }
+            Console.WriteLine($"You received {pal.Name}! {pal.Description}");
+        }
+        else
+        {
+            Console.WriteLine("Pal not found or already owned.");
+        }
+    }
 
     public static void OfferQuest(Quest quest)
     {
@@ -160,6 +177,9 @@ public static class Player
     {
         Inventory = new List<Item>();
         CurrentLocation = Map.StartLocation;
+        // Give the player a starter Pal (Bulbasaur)
+        var starterPal = Pals.GetPalByName("Pikachu");
+        AddPal(starterPal);
     }
 
     public static void Move(Command command)
@@ -324,6 +344,11 @@ public static class Player
     {
         if (CurrentLocation.Pals != null && CurrentLocation.Pals.Count > 0)
         {
+            if (CaughtPals == null || CaughtPals.Count == 0)
+            {
+                Console.WriteLine("You don't have any Pals to battle with!");
+                return;
+            }
             Pal pal = CurrentLocation.Pals[0];
             Console.WriteLine($"A wild {pal.Name} appears! You are pulled into battle.");
             if (!string.IsNullOrWhiteSpace(pal.Description))
