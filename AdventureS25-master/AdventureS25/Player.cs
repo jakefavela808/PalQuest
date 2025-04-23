@@ -152,6 +152,24 @@ public static class Player
         }
     }
 
+    public static void Battle(Command command)
+    {
+        if (CurrentLocation.Pals != null && CurrentLocation.Pals.Count > 0)
+        {
+            Pal pal = CurrentLocation.Pals[0];
+            Console.WriteLine($"A wild {pal.Name} appears! You are pulled into battle.");
+            if (!string.IsNullOrWhiteSpace(pal.Description))
+            {
+                Console.WriteLine(pal.Description);
+            }
+            States.ChangeState(StateTypes.Fighting);
+        }
+        else
+        {
+            Console.WriteLine("There are no Pals here to battle!");
+        }
+    }
+
     public static void MoveToLocation(string locationName)
     {
         // look up the location object based on the name

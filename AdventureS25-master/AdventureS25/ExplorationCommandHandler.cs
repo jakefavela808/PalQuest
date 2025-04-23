@@ -1,4 +1,4 @@
-﻿namespace AdventureS25;
+namespace AdventureS25;
 
 public static class ExplorationCommandHandler
 {
@@ -18,6 +18,7 @@ public static class ExplorationCommandHandler
             {"fight", ChangeToFightState},
             {"explore", ChangeToExploreState},
             {"talk", ChangeToTalkState},
+            {"battle", Battle},
             {"drink", Drink},
             {"beerme", SpawnBeerInInventory},
             {"unbeerme", UnSpawnBeerInInventory},
@@ -72,6 +73,11 @@ public static class ExplorationCommandHandler
     private static void ChangeToTalkState(Command command)
     {
         Player.Talk(command);
+    }
+
+    private static void Battle(Command command)
+    {
+        Player.Battle(command);
     }
     
     private static void ChangeToFightState(Command command)
