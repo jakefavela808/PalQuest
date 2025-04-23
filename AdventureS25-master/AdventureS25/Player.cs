@@ -165,8 +165,7 @@ public static class Player
             if (!string.IsNullOrWhiteSpace(pal.AsciiArt))
                 Console.WriteLine(pal.AsciiArt);
             Console.WriteLine($"Description: {pal.Description}");
-            Console.WriteLine($"Stats: HP 30, ATK 10, DEF 8 (example)");
-            Console.WriteLine($"Moves: Tackle, Growl (example)");
+            Console.WriteLine($"Stats: {pal.GetBattleStatsString(pal.HP)}");
         }
     }
     public static List<Pal> CaughtPals = new List<Pal>();

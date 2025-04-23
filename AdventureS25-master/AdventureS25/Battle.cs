@@ -15,7 +15,7 @@ namespace AdventureS25
         private int potions = 1;
 
         private bool easierToTameAnnounced = false;
-        private double catchChance = 0.3;
+        private double catchChance = 0.35;
         private int maxOpponentHP = 30;
 
         public Battle(Pal opponent)
@@ -37,13 +37,13 @@ namespace AdventureS25
             string playerName = playerPal != null ? playerPal.Name : "You";
             string playerArt = playerPal != null && !string.IsNullOrWhiteSpace(playerPal.AsciiArt) ? playerPal.AsciiArt : "";
             string playerDesc = playerPal != null ? playerPal.Description : "A brave trainer ready for battle!";
-            string playerStats = $"HP {PlayerHP}  ATK 10  DEF 8 (example)";
+            string playerStats = playerPal != null ? playerPal.GetBattleStatsString(PlayerHP) : $"HP {PlayerHP}";
 
             // Opponent info
             string oppName = Opponent.Name;
             string oppArt = !string.IsNullOrWhiteSpace(Opponent.AsciiArt) ? Opponent.AsciiArt : "";
             string oppDesc = !string.IsNullOrWhiteSpace(Opponent.Description) ? Opponent.Description : "A wild opponent appears!";
-            string oppStats = $"HP {OpponentHP}  ATK 10  DEF 8 (example)";
+            string oppStats = Opponent.GetBattleStatsString(OpponentHP);
 
             // Print player Pal info
             Console.WriteLine($"{playerName}");
@@ -64,9 +64,14 @@ namespace AdventureS25
 
         public void PlayerAttack()
         {
-            int damage = new Random().Next(6, 12);
+            var playerPal = Player.CaughtPals != null && Player.CaughtPals.Count > 0 ? Player.CaughtPals[0] : null;
+            string moveName = playerPal != null && playerPal.Moves.Count > 0 ? playerPal.Moves[0] : "Tackle";
+            int atk = playerPal != null ? playerPal.ATK : 10;
+            int damage = new Random().Next(atk - 2, atk + 3); // Use Pal's ATK for variability
+            if (damage < 1) damage = 1;
             OpponentHP -= damage;
-            Console.WriteLine($"You attack {Opponent.Name} for {damage} damage!");
+            string palName = playerPal != null ? playerPal.Name : "Your Pal";
+            Console.WriteLine($"{palName} used {moveName} on {Opponent.Name} for {damage} damage!");
             CheckEasierToTame();
             if (OpponentHP <= 0)
             {
@@ -79,9 +84,13 @@ namespace AdventureS25
 
         public void PlayerSpecialAttack()
         {
-            int damage = new Random().Next(10, 18);
+            var playerPal = Player.CaughtPals != null && Player.CaughtPals.Count > 0 ? Player.CaughtPals[0] : null;
+            string moveName = playerPal != null && playerPal.Moves.Count > 1 ? playerPal.Moves[1] : "Special Attack";
+            int atk = playerPal != null ? playerPal.ATK : 10;
+            int damage = new Random().Next(atk + 3, atk + 8); // Special attack is stronger
             OpponentHP -= damage;
-            Console.WriteLine($"You use a special attack on {Opponent.Name} for {damage} damage!");
+            string palName = playerPal != null ? playerPal.Name : "Your Pal";
+            Console.WriteLine($"{palName} used {moveName} on {Opponent.Name} for {damage} damage!");
             CheckEasierToTame();
             if (OpponentHP <= 0)
             {
@@ -136,20 +145,24 @@ namespace AdventureS25
             // Only trigger if below 50% and not already announced
             if (!easierToTameAnnounced && OpponentHP < (maxOpponentHP / 2))
             {
-                catchChance += 0.25; // Increase by 25%
+                catchChance = 0.7; // Set to 70%
                 easierToTameAnnounced = true;
                 Console.WriteLine($"{Opponent.Name} has weakened and is easier to tame!");
             }
-            // If OpponentHP goes above 50% again, reset flag so message can show again if it drops again
+            // If OpponentHP goes above 50% again, reset flag and restore base chance
             else if (easierToTameAnnounced && OpponentHP >= (maxOpponentHP / 2))
             {
                 easierToTameAnnounced = false;
+                catchChance = 0.35; // Reset to base chance
             }
         }
 
         public void PalAttack()
         {
-            int damage = new Random().Next(4, 10);
+            string moveName = Opponent.Moves != null && Opponent.Moves.Count > 0 ? Opponent.Moves[0] : "Tackle";
+            int atk = Opponent.ATK;
+            int damage = new Random().Next(atk - 2, atk + 3);
+            if (damage < 1) damage = 1;
             if (defendActive)
             {
                 damage /= 2;
@@ -157,7 +170,7 @@ namespace AdventureS25
                 Console.WriteLine("Your defense lessened the damage!");
             }
             PlayerHP -= damage;
-            Console.WriteLine($"{Opponent.Name} attacks you for {damage} damage!");
+            Console.WriteLine($"{Opponent.Name} used {moveName} on you for {damage} damage!");
             if (PlayerHP <= 0)
             {
                 State = BattleState.Lost;

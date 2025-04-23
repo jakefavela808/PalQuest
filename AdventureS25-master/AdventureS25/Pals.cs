@@ -27,7 +27,11 @@ public static class Pals
                 palData.Description,
                 palData.InitialDescription,
                 palData.IsAcquirable,
-                asciiArt
+                asciiArt,
+                palData.HP,
+                palData.ATK,
+                palData.DEF,
+                palData.Moves
             );
             nameToPal.Add(pal.Name, pal);
             Map.AddPal(pal.Name, palData.Location);
