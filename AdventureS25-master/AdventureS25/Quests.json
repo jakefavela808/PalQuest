@@ -1,0 +1,22 @@
+{
+  "Quests": [
+    {
+      "Name": "First Steps",
+      "Description": "Prove yourself by catching your first Pal!",
+      "InitialDescription": "A new adventure begins. Try to find and catch a Pal.",
+      "IsRepeatable": false,
+      "Reward": "Potion",
+      "Objectives": ["Catch a Pal"],
+      "Location": "Entrance"
+    },
+    {
+      "Name": "Trainer's Challenge",
+      "Description": "Defeat a rival trainer in battle.",
+      "InitialDescription": "A rival trainer blocks your path. Can you win?",
+      "IsRepeatable": true,
+      "Reward": "XP",
+      "Objectives": ["Win a trainer battle"],
+      "Location": "Arena"
+    }
+  ]
+}
