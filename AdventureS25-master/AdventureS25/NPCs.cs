@@ -18,7 +18,8 @@ public static class NPCs
                 npcData.Name,
                 npcData.Description,
                 npcData.InitialDescription,
-                npcData.IsInteractable
+                npcData.IsInteractable,
+                npcData.Dialogue
             );
             nameToNPC.Add(npc.Name, npc);
             Map.AddNPC(npc.Name, npcData.Location);

@@ -1,4 +1,4 @@
-﻿namespace AdventureS25;
+namespace AdventureS25;
 
 public static class Player
 {
@@ -130,6 +130,26 @@ public static class Player
             return;
         }
         Inventory.Remove(item);
+    }
+
+    public static void Talk(Command command)
+    {
+        if (CurrentLocation.NPCs != null && CurrentLocation.NPCs.Count > 0)
+        {
+            NPC npc = CurrentLocation.NPCs[0];
+            npc.Interact();
+            Console.WriteLine($"You talk to {npc.Name}.");
+            Console.WriteLine(npc.Description);
+            if (!string.IsNullOrWhiteSpace(npc.Dialogue))
+            {
+                Console.WriteLine(npc.Dialogue);
+            }
+            States.ChangeState(StateTypes.Talking);
+        }
+        else
+        {
+            Console.WriteLine("There is no one here to talk to.");
+        }
     }
 
     public static void MoveToLocation(string locationName)

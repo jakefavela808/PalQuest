@@ -28,17 +28,17 @@ public static class ExplorationCommandHandler
             {"disconnect", Disconnect}
         };
 
-    private static void Disconnect(Command obj)
+    private static void Disconnect(Command command)
     {
         Conditions.ChangeCondition(ConditionTypes.IsRemovedConnection, true);
     }
 
-    private static void Connect(Command obj)
+    private static void Connect(Command command)
     {
         Conditions.ChangeCondition(ConditionTypes.IsCreatedConnection, true);
     }
 
-    private static void Teleport(Command obj)
+    private static void Teleport(Command command)
     {
         Conditions.ChangeCondition(ConditionTypes.IsTeleported, true);
     }   
@@ -69,17 +69,17 @@ public static class ExplorationCommandHandler
         Player.Drink(command);
     }
 
-    private static void ChangeToTalkState(Command obj)
+    private static void ChangeToTalkState(Command command)
     {
-        States.ChangeState(StateTypes.Talking);
+        Player.Talk(command);
     }
     
-    private static void ChangeToFightState(Command obj)
+    private static void ChangeToFightState(Command command)
     {
         States.ChangeState(StateTypes.Fighting);
     }
     
-    private static void ChangeToExploreState(Command obj)
+    private static void ChangeToExploreState(Command command)
     {
         States.ChangeState(StateTypes.Exploring);
     }
