@@ -43,5 +43,18 @@ public static class Pals
         if (nameToPal.ContainsKey(palName))
             return nameToPal[palName];
         return null;
-    } // Already public, no change needed
+    }
+
+    // Returns all Pals whose Location is Oak's Lab (starter Pals)
+    public static List<Pal> GetStarterPals()
+    {
+        var starters = new List<Pal>();
+        foreach (var pal in nameToPal.Values)
+        {
+            // Hardcode for now as per Pals.json
+            if (pal.Name == "Clyde Capybara" || pal.Name == "Sandie" || pal.Name == "Gloop Glorp")
+                starters.Add(pal);
+        }
+        return starters;
+    }
 }

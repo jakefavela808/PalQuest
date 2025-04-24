@@ -18,6 +18,8 @@ namespace AdventureS25
         private double catchChance = 0.35;
         private int maxOpponentHP = 30;
 
+        private Pal playerPal; // The selected Pal for this battle
+
         public Battle(Pal opponent)
         {
             Opponent = opponent;
@@ -32,8 +34,33 @@ namespace AdventureS25
             Console.WriteLine("\n============================");
             Console.WriteLine("A battle is about to begin!");
 
-            // Get player's active Pal (first in CaughtPals) or fallback to 'You'
-            var playerPal = Player.CaughtPals != null && Player.CaughtPals.Count > 0 ? Player.CaughtPals[0] : null;
+            // Pal selection logic
+            if (Player.CaughtPals != null && Player.CaughtPals.Count > 1)
+            {
+                Console.WriteLine("Choose which Pal to use for this battle:");
+                for (int i = 0; i < Player.CaughtPals.Count; i++)
+                {
+                    var pal = Player.CaughtPals[i];
+                    Console.WriteLine($"[{i + 1}] {pal.Name} - {pal.Description}");
+                }
+                int choice = 0;
+                while (true)
+                {
+                    Console.Write("Enter the number of your choice: ");
+                    string input = Console.ReadLine();
+                    if (int.TryParse(input, out choice) && choice >= 1 && choice <= Player.CaughtPals.Count)
+                    {
+                        playerPal = Player.CaughtPals[choice - 1];
+                        break;
+                    }
+                    Console.WriteLine("Invalid choice. Please enter a valid number.");
+                }
+            }
+            else
+            {
+                playerPal = Player.CaughtPals != null && Player.CaughtPals.Count > 0 ? Player.CaughtPals[0] : null;
+            }
+
             string playerName = playerPal != null ? playerPal.Name : "You";
             string playerArt = playerPal != null && !string.IsNullOrWhiteSpace(playerPal.AsciiArt) ? playerPal.AsciiArt : "";
             string playerDesc = playerPal != null ? playerPal.Description : "A brave trainer ready for battle!";
@@ -64,7 +91,6 @@ namespace AdventureS25
 
         public void PlayerAttack()
         {
-            var playerPal = Player.CaughtPals != null && Player.CaughtPals.Count > 0 ? Player.CaughtPals[0] : null;
             string moveName = playerPal != null && playerPal.Moves.Count > 0 ? playerPal.Moves[0] : "Tackle";
             int atk = playerPal != null ? playerPal.ATK : 10;
             int damage = new Random().Next(atk - 2, atk + 3); // Use Pal's ATK for variability
@@ -76,7 +102,6 @@ namespace AdventureS25
             if (OpponentHP <= 0)
             {
                 State = BattleState.Won;
-                Console.WriteLine($"You defeated {Opponent.Name}!");
                 return;
             }
             State = BattleState.PalTurn;
@@ -84,7 +109,6 @@ namespace AdventureS25
 
         public void PlayerSpecialAttack()
         {
-            var playerPal = Player.CaughtPals != null && Player.CaughtPals.Count > 0 ? Player.CaughtPals[0] : null;
             string moveName = playerPal != null && playerPal.Moves.Count > 1 ? playerPal.Moves[1] : "Special Attack";
             int atk = playerPal != null ? playerPal.ATK : 10;
             int damage = new Random().Next(atk + 3, atk + 8); // Special attack is stronger
@@ -95,7 +119,6 @@ namespace AdventureS25
             if (OpponentHP <= 0)
             {
                 State = BattleState.Won;
-                Console.WriteLine($"You defeated {Opponent.Name} with a special move!");
                 return;
             }
             State = BattleState.PalTurn;
@@ -132,6 +155,7 @@ namespace AdventureS25
             {
                 State = BattleState.Won;
                 Console.WriteLine($"You tamed {Opponent.Name}!");
+                Player.AddPal(Opponent); // Ensure the tamed Pal is added to your collection
             }
             else
             {

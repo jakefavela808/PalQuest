@@ -11,6 +11,8 @@ public static class ExplorationCommandHandler
             {"troff", Troff},
             {"take", Take},
             {"inventory", ShowInventory},
+            {"quests", ShowQuests},
+            {"givequest", GiveQuestByName},
             {"look", Look},
             {"drop", Drop},
             {"nouns", Nouns},
@@ -139,6 +141,19 @@ public static class ExplorationCommandHandler
     private static void ShowInventory(Command command)
     {
         Player.ShowInventory();
+    }
+    private static void ShowQuests(Command command)
+    {
+        Player.ShowActiveQuests();
+    }
+    private static void GiveQuestByName(Command command)
+    {
+        if (string.IsNullOrWhiteSpace(command.Noun))
+        {
+            Console.WriteLine("Usage: givequest <quest name>");
+            return;
+        }
+        Player.GiveQuestByName(command.Noun);
     }
     
     private static void Take(Command command)

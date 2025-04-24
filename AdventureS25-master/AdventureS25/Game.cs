@@ -1,4 +1,4 @@
-﻿namespace AdventureS25;
+namespace AdventureS25;
 
 public static class Game
 {
@@ -31,6 +31,7 @@ public static class Game
 
     private static void Initialize()
     {
+        Quests.Initialize(); // Ensure quests are loaded first
         Conditions.Initialize();
         States.Initialize();
         Map.Initialize();

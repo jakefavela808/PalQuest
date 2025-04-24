@@ -10,4 +10,6 @@ public class NPCJsonData
     public string Location { get; set; }
     public string AsciiArt { get; set; }
     public List<string> Quests { get; set; }
+    public bool IsTrainer { get; set; } = false;
+    public List<string> Pals { get; set; } = new List<string>();
 }

@@ -4,7 +4,7 @@ namespace AdventureS25;
 
 public static class Quests
 {
-    private static Dictionary<string, Quest> nameToQuest = new Dictionary<string, Quest>();
+    private static Dictionary<string, Quest> nameToQuest = new Dictionary<string, Quest>(StringComparer.OrdinalIgnoreCase);
 
     public static void Initialize()
     {
@@ -23,16 +23,14 @@ public static class Quests
                 questData.Objectives,
                 questData.Location
             );
-            nameToQuest.Add(quest.Name, quest);
+            nameToQuest[quest.Name.Trim()] = quest;
         }
     }
 
     public static Quest GetQuestByName(string questName)
     {
-        if (nameToQuest.ContainsKey(questName))
-        {
-            return nameToQuest[questName];
-        }
-        return null;
+        if (string.IsNullOrWhiteSpace(questName)) return null;
+        nameToQuest.TryGetValue(questName.Trim(), out var quest);
+        return quest;
     }
 }

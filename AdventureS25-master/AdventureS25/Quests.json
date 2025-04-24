@@ -1,31 +1,41 @@
 {
-  "Quests": [
-    {
-      "Name": "Get Your Starter!",
-      "Description": "Visit Professor Oak and choose your first Pokémon.",
-      "InitialDescription": "Professor Oak is waiting for you in his lab.",
-      "IsRepeatable": false,
-      "Reward": "Starter Pokémon",
-      "Objectives": ["Talk to Professor Oak"],
-      "Location": "Oak's Lab"
-    },
-    {
-      "Name": "Catch a Pikachu!",
-      "Description": "Find and catch a wild Pikachu on Route 1.",
-      "InitialDescription": "A Pikachu has been spotted on Route 1!",
-      "IsRepeatable": false,
-      "Reward": "Poké Ball",
-      "Objectives": ["Catch Pikachu"],
-      "Location": "Route 1"
-    },
-    {
-      "Name": "Defeat Youngster Joey!",
-      "Description": "Battle Youngster Joey and his Rattata on Route 1.",
-      "InitialDescription": "Youngster Joey is looking for a battle!",
-      "IsRepeatable": true,
-      "Reward": "XP",
-      "Objectives": ["Win a battle against Youngster Joey"],
-      "Location": "Route 1"
-    }
-  ]
-}
+    "Quests": [
+      {
+        "Name": "Get Your Starter!",
+        "Description": "Talk to Jon in Oak's Lab and pick your first Pokémon!",
+        "InitialDescription": "Jon is waiting for you in Oak's Lab to help you choose your starter.",
+        "IsRepeatable": false,
+        "Reward": "Starter Pokémon",
+        "Objectives": ["Talk to Jon and pick your starter Pokémon"],
+        "Location": "Oak's Lab"
+      },
+      {
+        "Name": "Test Your Battle Skills!",
+        "Description": "Win your first Pal battle by taming or defeating a wild Pal.",
+        "InitialDescription": "Professor Jon wants to see how you handle yourself in a real Pal battle! Win your first Pal battle by taming or defeating a wild Pal.",
+        "IsRepeatable": false,
+        "Reward": "Potion",
+        "Objectives": ["Win a Pal battle (tame or defeat a wild Pal)"],
+        "Location": "Route 1"
+      },
+      {
+        "Name": "Catch a Sandie!",
+        "Description": "Find and catch a wild Sandie on Route 1.",
+        "InitialDescription": "A Sandie has been spotted on Route 1!",
+        "IsRepeatable": false,
+        "Reward": "Poké Ball",
+        "Objectives": ["Catch Sandie"],
+        "Location": "Route 1"
+      },
+      {
+        "Name": "Defeat Youngster Joey!",
+        "Description": "Battle Youngster Joey and his Rattata on Route 1.",
+        "InitialDescription": "Youngster Joey is looking for a battle!",
+        "IsRepeatable": true,
+        "Reward": "XP",
+        "Objectives": ["Win a battle against Youngster Joey"],
+        "Location": "Route 1"
+      }
+    ]
+  }
+  

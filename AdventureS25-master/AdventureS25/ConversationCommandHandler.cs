@@ -8,7 +8,7 @@ public static class ConversationCommandHandler
             {"talk", Player.Talk},
             {"yes", Yes},
             {"no", No},
-            {"quests", _ => Player.ShowActiveQuests()},
+
             {"completed", _ => Player.ShowCompletedQuests()},
             {"leave", Leave},
         };

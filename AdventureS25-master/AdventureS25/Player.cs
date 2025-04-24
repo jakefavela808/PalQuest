@@ -150,6 +150,29 @@ public static class Player
             Console.WriteLine($"Reward: {reward}");
         }
     }
+    public static void GiveQuestByName(string questName)
+    {
+        var quest = Quests.GetQuestByName(questName);
+        if (quest == null)
+        {
+            Console.WriteLine($"Quest not found: {questName}");
+            return;
+        }
+        if (ActiveQuests.Contains(quest))
+        {
+            Console.WriteLine($"You already have the quest: {quest.Name}");
+            return;
+        }
+        if (CompletedQuests.Contains(quest))
+        {
+            Console.WriteLine($"You have already completed the quest: {quest.Name}");
+            return;
+        }
+        ActiveQuests.Add(quest);
+        Console.WriteLine($"\n=== New Quest Given! ===");
+        Console.WriteLine($"Quest: {quest.Name}");
+        Console.WriteLine($"{quest.Description}\n");
+    }
     // ...
     public static void ShowCaughtPals()
     {
@@ -173,13 +196,11 @@ public static class Player
     public static List<Item> Inventory;
 
     public static void Initialize()
-    {
-        Inventory = new List<Item>();
-        CurrentLocation = Map.StartLocation;
-        // Give the player a starter Pal (Bulbasaur)
-        var starterPal = Pals.GetPalByName("Pikachu");
-        AddPal(starterPal);
-    }
+{
+    Inventory = new List<Item>();
+    CurrentLocation = Map.StartLocation;
+    // Starter Pal is now chosen via Professor Jon interaction, not here.
+}
 
     public static void Move(Command command)
     {
@@ -302,12 +323,68 @@ public static class Player
         Inventory.Remove(item);
     }
 
+    public static HashSet<string> DefeatedTrainers = new HashSet<string>();
     public static void Talk(Command command)
     {
         if (CurrentLocation.NPCs != null && CurrentLocation.NPCs.Count > 0)
         {
             NPC npc = CurrentLocation.NPCs[0];
             npc.Interact();
+            if (npc.IsTrainer && npc.Pals != null && npc.Pals.Count > 0)
+            {
+                if (DefeatedTrainers.Contains(npc.Name))
+                {
+                    Console.WriteLine($"Trainer {npc.Name}: You already beat me! Maybe next time...");
+                    States.ChangeState(StateTypes.Talking);
+                    return;
+                }
+                Console.WriteLine($"Trainer {npc.Name} challenges you to a battle!");
+                States.ChangeState(StateTypes.Fighting);
+                // Pick the first Pal for now (can be extended to multiple)
+                var battle = new Battle(npc.Pals[0]);
+                battle.StartBattle();
+                CombatCommandHandler.CurrentBattle = battle;
+                while (battle.State != BattleState.Won && battle.State != BattleState.Lost)
+                {
+                    if (battle.State == BattleState.PlayerTurn)
+                    {
+                        Console.Write("> ");
+                        string input = Console.ReadLine()?.Trim().ToLower();
+                        Command combatCommand = new Command();
+                        combatCommand.Verb = input;
+                        if (CombatCommandValidator.IsValid(combatCommand))
+                        {
+                            CombatCommandHandler.Handle(combatCommand);
+                            if (battle.State == BattleState.Won)
+                            {
+                                Console.WriteLine($"You defeated Trainer {npc.Name}!");
+                                States.ChangeState(StateTypes.Exploring);
+                                return;
+                            }
+                            if (States.CurrentStateType == StateTypes.Exploring)
+                            {
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine("Invalid command. Valid commands are: basic, special, defend, potion, tame, run.");
+                        }
+                    }
+                    else if (battle.State == BattleState.PalTurn)
+                    {
+                        battle.PalAttack();
+                    }
+                }
+                if (battle.State == BattleState.Won)
+                {
+                    Console.WriteLine($"You defeated Trainer {npc.Name}!");
+                    DefeatedTrainers.Add(npc.Name);
+                }
+                States.ChangeState(StateTypes.Exploring);
+                return;
+            }
+            // Non-trainer NPCs
             Console.WriteLine($"You talk to {npc.Name}.");
             if (!string.IsNullOrWhiteSpace(npc.AsciiArt))
             {
@@ -318,13 +395,51 @@ public static class Player
             {
                 Console.WriteLine(npc.Dialogue);
             }
+
+            // Starter selection logic for Professor Jon
+            if (npc.Name.ToLower().Contains("professor jon") && !CaughtPals.Any())
+            {
+                // Get all starter pals from Pals
+                var starterPals = Pals.GetStarterPals();
+                if (starterPals.Count > 0)
+                {
+                    Console.WriteLine("\nProfessor Jon: Please choose your starter Pal!");
+                    for (int i = 0; i <starterPals.Count; i++)
+                    {
+                        Console.WriteLine($"[{i + 1}] {starterPals[i].Name} - {starterPals[i].Description}");
+                    }
+                    int choice = -1;
+                    while (choice < 1 || choice > starterPals.Count)
+                    {
+                        Console.Write("Enter the number of your choice: ");
+                        string input = Console.ReadLine();
+                        int.TryParse(input, out choice);
+                    }
+                    var chosenPal = starterPals[choice - 1];
+                    AddPal(chosenPal);
+                    Console.WriteLine($"\nYou chose {chosenPal.Name} as your starter!");
+                    // Always give the player the Test Your Battle Skills! quest after picking starter
+                    GiveQuestByName("Test Your Battle Skills!");
+                }
+                else
+                {
+                    Console.WriteLine("No starter Pals available!");
+                }
+            }
+
             npc.OfferQuests();
-            // Complete 'Get Your Starter!' quest after talking to Professor Oak
+            // Complete 'Get Your Starter!' quest after talking to Professor Jon and after player has a Pal
             foreach (var quest in ActiveQuests.ToList())
             {
-                if (npc.Name.ToLower().Contains("oak") && quest.Name == "Get Your Starter!" && !quest.IsComplete())
+                if (npc.Name.ToLower().Contains("professor jon") && quest.Name == "Get Your Starter!" && !quest.IsComplete() && CaughtPals.Any())
                 {
                     CompleteQuest(quest);
+                    // Immediately offer the new quest: Test Your Battle Skills!
+                    var testBattleQuest = Quests.GetQuestByName("Test Your Battle Skills!");
+                    if (testBattleQuest != null && !ActiveQuests.Contains(testBattleQuest) && !testBattleQuest.IsComplete())
+                    {
+                        OfferQuest(testBattleQuest);
+                    }
                 }
                 if (npc.Name.ToLower().Contains("joey") && quest.Name == "Defeat Youngster Joey!" && !quest.IsComplete())
                 {
@@ -375,7 +490,7 @@ public static class Player
                         // Tame can win instantly, so check for win
                         if (battle.State == BattleState.Won)
                         {
-                            Console.WriteLine($"You tamed {pal.Name}! {pal.Name} is now your Pal.");
+                            Console.WriteLine($"You defeated {pal.Name}!");
                             CurrentLocation.Pals.Remove(pal);
                             States.ChangeState(StateTypes.Exploring);
                             return;
@@ -407,22 +522,22 @@ public static class Player
                         Console.WriteLine($"\n{pal.AsciiArt}\n");
                     }
                     Console.WriteLine(pal.Description);
-                    // Offer Pikachu quest if catching Pikachu
-                    if (pal.Name.ToLower().Contains("pikachu"))
+                    // Offer Sandie quest if catching Sandie
+                    if (pal.Name.ToLower().Contains("Sandie"))
                     {
-                        var pikachuQuest = Quests.GetQuestByName("Catch a Pikachu!");
-                        if (pikachuQuest != null)
-                            OfferQuest(pikachuQuest);
-                        // Complete 'Catch a Pikachu!' quest if active
+                        var SandieQuest = Quests.GetQuestByName("Catch a Sandie!");
+                        if (SandieQuest != null)
+                            OfferQuest(SandieQuest);
+                        // Complete 'Catch a Sandie!' quest if active
                         foreach (var quest in ActiveQuests.ToList())
                         {
-                            if (quest.Name == "Catch a Pikachu!" && !quest.IsComplete())
+                            if (quest.Name == "Catch a Sandie!" && !quest.IsComplete())
                                 CompleteQuest(quest);
                         }
                     }
                 }
-                CurrentLocation.Pals.Remove(pal);
             }
+            CurrentLocation.Pals.Remove(pal);
             States.ChangeState(StateTypes.Exploring);
         }
         else

@@ -24,15 +24,27 @@ public static class NPCs
                         quests.Add(quest);
                 }
             }
-            NPC npc = new NPC(
-                npcData.Name,
-                npcData.Description,
-                npcData.InitialDescription,
-                npcData.IsInteractable,
-                npcData.Dialogue,
-                npcData.AsciiArt,
-                quests
-            );
+            List<Pal> pals = new List<Pal>();
+if (npcData.Pals != null)
+{
+    foreach (var palName in npcData.Pals)
+    {
+        var pal = Pals.GetPalByName(palName);
+        if (pal != null)
+            pals.Add(pal);
+    }
+}
+NPC npc = new NPC(
+    npcData.Name,
+    npcData.Description,
+    npcData.InitialDescription,
+    npcData.IsInteractable,
+    npcData.Dialogue,
+    npcData.AsciiArt,
+    quests,
+    npcData.IsTrainer,
+    pals
+);
             nameToNPC.Add(npc.Name, npc);
             Map.AddNPC(npc.Name, npcData.Location);
         }

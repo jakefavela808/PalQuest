@@ -1,31 +1,22 @@
 {
   "NPCs": [
     {
-      "Name": "Professor Oak",
+      "Name": "Old Man",
+      "Description": "A wise old man with a long beard.",
+      "InitialDescription": "An old man stands here, stroking his beard thoughtfully.",
+      "IsInteractable": true,
+      "Location": "Entrance",
+      "Dialogue": "Hey there, how are you?"
+    },
+    {
+      "Name": "Professor Jon",
       "Description": "The world-famous Pokémon Professor.",
-      "InitialDescription": "Professor Oak is here, ready to give you your first Pokémon!",
+      "InitialDescription": "Professor Jon is here, ready to give you your first Pokémon!",
       "IsInteractable": true,
       "Location": "Oak's Lab",
       "Dialogue": "Welcome to the world of Pokémon! Here, take this Pokédex and choose your starter.",
-      "AsciiArt": "  ____\n /    \\__\n|  o  o  |\n|   --   |\n \\______/"
-    },
-    {
-      "Name": "Nurse Joy",
-      "Description": "The kind nurse who heals Pokémon.",
-      "InitialDescription": "Nurse Joy stands behind the counter, smiling warmly.",
-      "IsInteractable": true,
-      "Location": "Viridian City",
-      "Dialogue": "Welcome to the Pokémon Center! We'll heal your Pokémon to full health.",
-      "AsciiArt": "  (\"\")\n ( o o )\n /  V  \\\n/--m-m--\\"
-    },
-    {
-      "Name": "Youngster Joey",
-      "Description": "A young trainer eager for battle.",
-      "InitialDescription": "Youngster Joey is here, looking for a challenge!",
-      "IsInteractable": true,
-      "Location": "Route 1",
-      "Dialogue": "My Rattata is in the top percentage of Rattata! Let's battle!",
-      "AsciiArt": "  o\n /|\\\n / \\\n"
+      "AsciiArt": "  ____\n /    \\__\n|  o  o  |\n|   --   |\n \\______/",
+      "Quests": ["Get Your Starter!", "Test Your Battle Skills!"]
     }
   ]
 }
