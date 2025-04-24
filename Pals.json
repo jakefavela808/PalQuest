@@ -5,7 +5,7 @@
       "Description": "A rare corgi-type Pal with quantum-computing capabilities. She's extremely affectionate and loyal.q",
       "InitialDescription": "A wild Sandie is here, its tail crackling with electricity!",
       "IsAcquirable": true,
-      "Location": "============ Route 1 ===========",
+      "Location": "Route 1",
       "AsciiArt": "AsciiArt.sandiePal"
     },
     {
@@ -13,7 +13,7 @@
       "Description": "A capybara-type Pal with a bulb on its back.",
       "InitialDescription": "A wild Clyde Capybara is here, looking ready to join a trainer!",
       "IsAcquirable": true,
-      "Location": "============ Route 1 ===========",
+      "Location": "Route 1",
       "AsciiArt": "AsciiArt.clydeCapybaraPal"
     },
     {
@@ -21,7 +21,7 @@
       "Description": "A tiny feline-type Pal that is common in grassy areas.",
       "InitialDescription": "A wild Gloop Glorp flutters nearby, pecking at the ground.",
       "IsAcquirable": true,
-      "Location": "============ Route 1 ===========",
+      "Location": "Route 1",
       "AsciiArt": "AsciiArt.gloopGlorpPal"
     }
   ]

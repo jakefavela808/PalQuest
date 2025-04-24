@@ -7,7 +7,7 @@
         "IsRepeatable": false,
         "Reward": "Starter Pals",
         "Objectives": ["Talk to Jon and pick your starter Pals"],
-        "Location": "============ Professor Jon's Lab ==========="
+        "Location": "Professor Jon's Lab"
       },
       {
         "Name": "Test Your Battle Skills!",
@@ -16,7 +16,7 @@
         "IsRepeatable": false,
         "Reward": "potion",
         "Objectives": ["Win a Pal battle (tame or defeat a wild Pal)"],
-        "Location": "============ Route 1 ==========="
+        "Location": "Route 1"
       },
       {
         "Name": "Defeat Youngster Joey!",
@@ -25,7 +25,7 @@
         "IsRepeatable": true,
         "Reward": "XP",
         "Objectives": ["Win a battle against Youngster Joey"],
-        "Location": "============ Route 1 ==========="
+        "Location": "Route 1"
       },
       {
         "Name": "Visit the Nurse!",
@@ -34,7 +34,7 @@
         "IsRepeatable": false,
         "Reward": "Potion",
         "Objectives": ["Talk to Nurse Noelia at the Pal Center"],
-        "Location": "============ Pal Center ==========="
+        "Location": "Pal Center"
       },
       {
         "Name": "Deliver the Potion to Matt!",
@@ -43,7 +43,7 @@
         "IsRepeatable": false,
         "Reward": "XP, Matt's gratitude",
         "Objectives": ["Bring the potion to Matt at the Log Cabin"],
-        "Location": "============ Log Cabin ==========="
+        "Location": "Log Cabin"
       }
     ]
   }

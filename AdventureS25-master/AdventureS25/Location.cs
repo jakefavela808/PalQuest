@@ -62,13 +62,13 @@ public class Location
 
     public string GetDescription()
     {
-        string fullDescription = name;
+        string fullDescription = LocationNameFormatter.Decorate(name);
         string asciiArtToDisplay = GetAsciiArtResolved();
         if (!string.IsNullOrWhiteSpace(asciiArtToDisplay))
         {
             fullDescription += "\n" + asciiArtToDisplay;
         }
-        fullDescription += Description + "\n";
+        fullDescription += "\n" + Description + "\n";
 
         foreach (Item item in Items)
         {
