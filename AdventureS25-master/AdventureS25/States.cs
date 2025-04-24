@@ -1,4 +1,4 @@
-﻿namespace AdventureS25;
+namespace AdventureS25;
 
 public static class States
 {
@@ -30,9 +30,13 @@ public static class States
         {
             return;
         }
+        if (CurrentStateType == stateType)
+        {
+            // Already in this state, do nothing
+            return;
+        }
         CurrentState = states[stateType];
         CurrentStateType = stateType;
-        
         Console.WriteLine("Changing to state " + stateType);
     }
 }

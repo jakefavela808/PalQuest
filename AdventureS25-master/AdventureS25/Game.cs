@@ -5,9 +5,9 @@ public static class Game
     public static void PlayGame()
     {
         Initialize();
-
+        Console.Clear();
         Console.WriteLine(Player.GetLocationDescription());
-        
+
         bool isPlaying = true;
         
         while (isPlaying == true)

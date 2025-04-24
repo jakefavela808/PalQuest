@@ -1,22 +1,34 @@
 {
   "NPCs": [
     {
-      "Name": "Old Man",
-      "Description": "A wise old man with a long beard.",
-      "InitialDescription": "An old man stands here, stroking his beard thoughtfully.",
+      "Name": "Matt",
+      "Description": "A wise Matt with a long beard who lives in a cozy log cabin.",
+      "InitialDescription": "Matt stands here, ready to greet visitors at his log cabin.",
       "IsInteractable": true,
-      "Location": "Entrance",
-      "Dialogue": "Hey there, how are you?"
+      "Location": "============ Log Cabin ===========",
+      "Dialogue": "Thank you for bringing me this potion! I feel much better now. Please take this as a token of my gratitude.",
+      "AsciiArt": "  /\\_/\\\n ( o.o )\n  > ^ <",
+      "Quests": []
     },
     {
       "Name": "Professor Jon",
       "Description": "The world-famous Pals Professor.",
       "InitialDescription": "Professor Jon is here, ready to give you your first Pals!",
       "IsInteractable": true,
-      "Location": "Professor Jon's Lab",
+      "Location": "============ Professor Jon's Lab ===========",
       "Dialogue": "Welcome to the world of Pals! Here, take this Paldex and choose your starter.",
       "AsciiArt": "  ____\n /    \\__\n|  o  o  |\n|   --   |\n \\______/",
       "Quests": ["Get Your Starter!", "Test Your Battle Skills!"]
+    },
+    {
+      "Name": "Nurse Noelia",
+      "Description": "A kind nurse who cares for all Pals and their trainers.",
+      "InitialDescription": "Nurse Noelia stands behind the counter, ready to help heal your Pals.",
+      "IsInteractable": true,
+      "Location": "============ Pal Center ===========",
+      "Dialogue": "Hello, I'm Nurse Noelia! Let me heal your Pals to full health. I also have a favor to ask: could you deliver this potion to Matt at the Log Cabin?",
+      "AsciiArt": "  _\n ( )\n /_\\\n | |\n/___\\\n(^_^)",
+      "Quests": ["Deliver the Potion to Matt!"]
     }
   ]
 }

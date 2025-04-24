@@ -5,14 +5,14 @@
       "Description": "A treat for Pal.",
       "InitialDescription": "A treat lies on the ground, ready to be used.",
       "IsTakeable": true,
-      "Location": "Orange Town"
+      "Location": "============ Orange Town ============"
     },
     {
       "Name": "potion",
       "Description": "A spray-type medicine for treating wounds. It restores the HP of one Pals by 20 points.",
       "InitialDescription": "A potion sits here, perfect for healing your Pals.",
       "IsTakeable": true,
-      "Location": "Viridian City"
+      "Location": "============ Viridian City ============"
     }
   ]
 }

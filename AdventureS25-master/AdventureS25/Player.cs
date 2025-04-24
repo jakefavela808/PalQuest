@@ -65,9 +65,7 @@ public static class Player
         if (!ActiveQuests.Contains(quest))
         {
             ActiveQuests.Add(quest);
-            Console.WriteLine("\n=== New Quest Accepted! ===");
-            Console.WriteLine($"Quest: {quest.Name}");
-            Console.WriteLine($"{quest.Description}\n");
+            CurrentLocation.NewQuestAccepted = quest;
         }
     }
 
@@ -217,6 +215,7 @@ public static class Player
     {
         if (CurrentLocation.CanMoveInDirection(command))
         {
+            Console.Clear();
             CurrentLocation = CurrentLocation.GetLocationInDirection(command);
             Console.WriteLine(CurrentLocation.GetDescription());
         }
@@ -340,6 +339,7 @@ public static class Player
         if (CurrentLocation.NPCs != null && CurrentLocation.NPCs.Count > 0)
         {
             NPC npc = CurrentLocation.NPCs[0];
+            Console.Clear();
             npc.Interact();
             if (npc.IsTrainer && npc.Pals != null && npc.Pals.Count > 0)
             {
@@ -406,6 +406,60 @@ public static class Player
             {
                 Console.WriteLine(npc.Dialogue);
             }
+            // Nurse Noelia quest logic
+            if (npc.Name.ToLower().Contains("nurse noelia"))
+            {
+                var visitNurseQuest = Quests.GetQuestByName("Visit the Nurse!");
+                var deliverPotionQuest = Quests.GetQuestByName("Deliver the Potion to Matt!");
+                // If player has 'Visit the Nurse!' quest active, heal and offer next quest
+                if (visitNurseQuest != null && ActiveQuests.Contains(visitNurseQuest) && !visitNurseQuest.IsComplete())
+                {
+                    foreach (var pal in CaughtPals)
+                    {
+                        pal.GetType().GetProperty("HP").SetValue(pal, pal.GetType().GetProperty("HP").GetValue(pal));
+                        // pal.CurrentHP = pal.HP;
+                    }
+                    Console.WriteLine("All your Pals have been fully healed!");
+                    CompleteQuest(visitNurseQuest);
+                    if (deliverPotionQuest != null && !ActiveQuests.Contains(deliverPotionQuest) && !deliverPotionQuest.IsComplete())
+                    {
+                        OfferQuest(deliverPotionQuest);
+                    }
+                }
+                else
+                {
+                    foreach (var pal in CaughtPals)
+                    {
+                        pal.GetType().GetProperty("HP").SetValue(pal, pal.GetType().GetProperty("HP").GetValue(pal));
+                    }
+                    Console.WriteLine("All your Pals have been fully healed!");
+                }
+            }
+
+            // Matt quest logic
+            if (npc.Name.ToLower().Contains("matt"))
+            {
+                var deliverPotionQuest = Quests.GetQuestByName("Deliver the Potion to Matt!");
+                var potion = Items.GetItemByName("Potion");
+                if (deliverPotionQuest != null && ActiveQuests.Contains(deliverPotionQuest) && !deliverPotionQuest.IsComplete())
+                {
+                    // Check if player has the potion
+                    if (Inventory.Contains(potion))
+                    {
+                        Inventory.Remove(potion);
+                        Console.WriteLine("Thank you for bringing me this potion! I feel much better now. Please take this as a token of my gratitude.");
+                        CompleteQuest(deliverPotionQuest); // This will print the reward!
+                    }
+                    else
+                    {
+                        Console.WriteLine("Do you have my potion?");
+                    }
+                }
+                else if (deliverPotionQuest != null && !ActiveQuests.Contains(deliverPotionQuest) && !deliverPotionQuest.IsComplete() && PendingQuestOffer == null)
+                {
+                    OfferQuest(deliverPotionQuest);
+                }
+            }
 
             // Starter selection logic for Professor Jon
             if (npc.Name.ToLower().Contains("professor jon") && !CaughtPals.Any())
@@ -429,6 +483,12 @@ public static class Player
                     var chosenPal = starterPals[choice - 1];
                     AddPal(chosenPal);
                     Console.WriteLine($"\nYou chose {chosenPal.Name} as your starter!");
+                    // Complete 'Get Your Starter!' quest if active
+                    var starterQuest = Quests.GetQuestByName("Get Your Starter!");
+                    if (starterQuest != null && ActiveQuests.Contains(starterQuest) && !starterQuest.IsComplete())
+                    {
+                        CompleteQuest(starterQuest);
+                    }
                     // No longer immediately give 'Test Your Battle Skills!' quest here. It will be offered after 'Get Your Starter!' is completed.
                 }
                 else
@@ -439,24 +499,8 @@ public static class Player
 
             npc.OfferQuests();
             // Complete 'Get Your Starter!' quest after talking to Professor Jon and after player has a Pal
-            foreach (var quest in ActiveQuests.ToList())
-            {
-                if (npc.Name.ToLower().Contains("professor jon") && quest.Name == "Get Your Starter!" && !quest.IsComplete() && CaughtPals.Any())
-                {
-                    CompleteQuest(quest);
-                    // Immediately offer the new quest: Test Your Battle Skills!
-                    var testBattleQuest = Quests.GetQuestByName("Test Your Battle Skills!");
-                    if (testBattleQuest != null && !ActiveQuests.Contains(testBattleQuest) && !testBattleQuest.IsComplete())
-                    {
-                        OfferQuest(testBattleQuest);
-                    }
-                }
-                if (npc.Name.ToLower().Contains("joey") && quest.Name == "Defeat Youngster Joey!" && !quest.IsComplete())
-                {
-                    CompleteQuest(quest);
-                }
-            }
             States.ChangeState(StateTypes.Talking);
+            return;
         }
         else
         {
@@ -505,10 +549,20 @@ public static class Player
                             foreach (var quest in ActiveQuests.ToList())
                             {
                                 if (quest.Name == "Test Your Battle Skills!" && !quest.IsComplete())
+                                {
                                     CompleteQuest(quest);
+                                    // After completing, automatically add 'Visit the Nurse!' quest
+                                    var visitNurseQuest = Quests.GetQuestByName("Visit the Nurse!");
+                                    if (visitNurseQuest != null && !ActiveQuests.Contains(visitNurseQuest) && !visitNurseQuest.IsComplete())
+                                    {
+                                        ActiveQuests.Add(visitNurseQuest);
+                                        Console.WriteLine("\n=========== New Quest Added! ===========");
+                                        Console.WriteLine($"Quest: {visitNurseQuest.Name}");
+                                        Console.WriteLine($"{visitNurseQuest.Description}\n");
+                                    }
+                                }
                             }
-                            CurrentLocation.Pals.Remove(pal);
-                            States.ChangeState(StateTypes.Exploring);
+                            States.ChangeState(StateTypes.Talking);
                             return;
                         }
                         // Run can escape, so check for exploring state

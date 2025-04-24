@@ -1,25 +1,41 @@
 ﻿{
   "Locations": [
     {
-      "Name": "Orange Town",
+      "Name": "============ Orange Town ============",
       "Description": "A small town with a few houses and Professor Jon's Lab.",
-      "Connections": {"north": "Route 1", "east": "Professor Jon's Lab"}
+      "Connections": {"north": "============ Route 1 ============" , "east": "============ Professor Jon's Lab ============"},
+      "AsciiArt": "AsciiArt.homeLocation"
     },
     {
-      "Name": "Professor Jon's Lab",
+      "Name": "============ Professor Jon's Lab ============",
       "Description": "Professor Jon's famous laboratory, filled with Pals research equipment.",
-      "Connections": {"west": "Orange Town"}
+      "Connections": {"west": "============ Orange Town ============"},
+      "AsciiArt": "AsciiArt.laboratoryLocation"
     },
     {
-      "Name": "Route 1",
+      "Name": "============ Route 1 ============",
       "Description": "A grassy path connecting Orange Town and Viridian City. Wild Pals can be found here!",
-      "Connections": {"south": "Orange Town", "north": "Viridian City"}
+      "Connections": {"south": "============ Orange Town ============" , "north": "============ Viridian City ============"},
+      "AsciiArt": "AsciiArt.grasslandsLocation"
     },
     {
-      "Name": "Viridian City",
-      "Description": "A bustling city with a Pals Center and Pal Mart.",
-      "Connections": {"south": "Route 1"}
+      "Name": "============ Viridian City ============",
+      "Description": "A bustling city with a Pal Center and Pal Mart.",
+      "Connections": {"south": "============ Route 1 ============", "east": "============ Pal Center ============", "north": "============ Log Cabin ============"},
+      "AsciiArt": "AsciiArt.cityLocation"
+    },
+    {
+      "Name": "============ Pal Center ===========",
+      "Description": "A modern facility where Nurse Noelia heals your Pals and offers advice.",
+      "Connections": {"west": "============ Viridian City ============"},
+      "AsciiArt": "AsciiArt.palCenterLocation"
+    },
+    {
+      "Name": "============ Log Cabin ===========",
+      "Description": "A cozy log cabin deep in the woods, home to Matt.",
+      "Connections": {"south": "============ Viridian City ============"},
+      "AsciiArt": "AsciiArt.logCabinLocation"
     }
   ],
-  "StartLocation": "Orange Town"
+  "StartLocation": "============ Orange Town ============"
 }

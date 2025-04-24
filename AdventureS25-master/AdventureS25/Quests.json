@@ -7,7 +7,7 @@
         "IsRepeatable": false,
         "Reward": "Starter Pals",
         "Objectives": ["Talk to Jon and pick your starter Pals"],
-        "Location": "Professor Jon's Lab"
+        "Location": "============ Professor Jon's Lab ==========="
       },
       {
         "Name": "Test Your Battle Skills!",
@@ -16,7 +16,7 @@
         "IsRepeatable": false,
         "Reward": "potion",
         "Objectives": ["Win a Pal battle (tame or defeat a wild Pal)"],
-        "Location": "Route 1"
+        "Location": "============ Route 1 ==========="
       },
       {
         "Name": "Defeat Youngster Joey!",
@@ -25,7 +25,25 @@
         "IsRepeatable": true,
         "Reward": "XP",
         "Objectives": ["Win a battle against Youngster Joey"],
-        "Location": "Route 1"
+        "Location": "============ Route 1 ==========="
+      },
+      {
+        "Name": "Visit the Nurse!",
+        "Description": "Visit Nurse Noelia at the Pal Center in Viridian City to heal your Pals.",
+        "InitialDescription": "Professor Jon suggests you visit Nurse Noelia at the Pal Center in Viridian City!",
+        "IsRepeatable": false,
+        "Reward": "Potion",
+        "Objectives": ["Talk to Nurse Noelia at the Pal Center"],
+        "Location": "============ Pal Center ==========="
+      },
+      {
+        "Name": "Deliver the Potion to Matt!",
+        "Description": "Deliver a potion from Nurse Noelia to Matt at the Log Cabin.",
+        "InitialDescription": "Nurse Noelia has asked you to deliver a potion to Matt, who lives in the Log Cabin.",
+        "IsRepeatable": false,
+        "Reward": "XP, Matt's gratitude",
+        "Objectives": ["Bring the potion to Matt at the Log Cabin"],
+        "Location": "============ Log Cabin ==========="
       }
     ]
   }
