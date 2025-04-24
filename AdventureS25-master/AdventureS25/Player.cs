@@ -5,6 +5,8 @@ public static class Player
     public static List<Quest> ActiveQuests = new List<Quest>();
     public static List<Quest> DeclinedQuests = new List<Quest>();
     public static List<Quest> CompletedQuests = new List<Quest>();
+    // Ensure quest lists are cleared on new game
+
     public static void AddPal(Pal pal)
     {
         if (pal != null && !CaughtPals.Contains(pal))
@@ -25,7 +27,7 @@ public static class Player
 
     public static void OfferQuest(Quest quest)
     {
-        if (ActiveQuests.Contains(quest) || DeclinedQuests.Contains(quest))
+        if (ActiveQuests.Contains(quest))
             return;
         Console.WriteLine($"\n=== Quest Offer ===");
         Console.WriteLine($"Quest: {quest.Name}");
@@ -41,6 +43,8 @@ public static class Player
     {
         if (PendingQuestOffer != null)
         {
+            if (DeclinedQuests.Contains(PendingQuestOffer))
+                DeclinedQuests.Remove(PendingQuestOffer);
             ReceiveQuest(PendingQuestOffer);
             PendingQuestOffer = null;
         }
@@ -200,6 +204,13 @@ public static class Player
     Inventory = new List<Item>();
     CurrentLocation = Map.StartLocation;
     // Starter Pal is now chosen via Professor Jon interaction, not here.
+
+    // Automatically add 'Get Your Starter!' quest if not already active or completed
+    var starterQuest = Quests.GetQuestByName("Get Your Starter!");
+    if (starterQuest != null && !ActiveQuests.Contains(starterQuest) && !CompletedQuests.Contains(starterQuest))
+    {
+        ReceiveQuest(starterQuest);
+    }
 }
 
     public static void Move(Command command)
