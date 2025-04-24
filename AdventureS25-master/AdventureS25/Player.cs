@@ -27,7 +27,7 @@ public static class Player
 
     public static void OfferQuest(Quest quest)
     {
-        if (ActiveQuests.Contains(quest))
+        if (ActiveQuests.Contains(quest) || CompletedQuests.Contains(quest))
             return;
         Console.WriteLine($"\n=== Quest Offer ===");
         Console.WriteLine($"Quest: {quest.Name}");
@@ -429,8 +429,7 @@ public static class Player
                     var chosenPal = starterPals[choice - 1];
                     AddPal(chosenPal);
                     Console.WriteLine($"\nYou chose {chosenPal.Name} as your starter!");
-                    // Always give the player the Test Your Battle Skills! quest after picking starter
-                    GiveQuestByName("Test Your Battle Skills!");
+                    // No longer immediately give 'Test Your Battle Skills!' quest here. It will be offered after 'Get Your Starter!' is completed.
                 }
                 else
                 {
@@ -502,6 +501,12 @@ public static class Player
                         if (battle.State == BattleState.Won)
                         {
                             Console.WriteLine($"You defeated {pal.Name}!");
+                            // Complete 'Test Your Battle Skills!' quest if active and not complete
+                            foreach (var quest in ActiveQuests.ToList())
+                            {
+                                if (quest.Name == "Test Your Battle Skills!" && !quest.IsComplete())
+                                    CompleteQuest(quest);
+                            }
                             CurrentLocation.Pals.Remove(pal);
                             States.ChangeState(StateTypes.Exploring);
                             return;
@@ -546,6 +551,12 @@ public static class Player
                                 CompleteQuest(quest);
                         }
                     }
+                }
+                // Complete 'Test Your Battle Skills!' quest if active and not complete
+                foreach (var quest in ActiveQuests.ToList())
+                {
+                    if (quest.Name == "Test Your Battle Skills!" && !quest.IsComplete())
+                        CompleteQuest(quest);
                 }
             }
             CurrentLocation.Pals.Remove(pal);

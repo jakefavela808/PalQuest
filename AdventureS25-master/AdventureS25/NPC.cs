@@ -31,10 +31,21 @@ public class NPC
 
     public void OfferQuests()
     {
-        foreach (var quest in Quests)
+        // Get quests not completed or active
+        var availableQuests = Quests.Where(q => !Player.CompletedQuests.Contains(q) && !Player.ActiveQuests.Contains(q)).ToList();
+        if (availableQuests.Count > 0)
         {
-            Player.OfferQuest(quest);
+            // Only offer the last (most recent) available quest
+            Player.OfferQuest(availableQuests.Last());
+            return;
         }
+        // If all quests have been declined, offer the most recently declined one from this NPC
+        var declined = Quests.Where(q => Player.DeclinedQuests.Contains(q)).ToList();
+        if (declined.Count > 0)
+        {
+            Player.OfferQuest(declined.Last());
+        }
+        // Otherwise, offer nothing
     }
 
     public void Interact()

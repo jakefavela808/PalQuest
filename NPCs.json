@@ -10,11 +10,11 @@
     },
     {
       "Name": "Professor Jon",
-      "Description": "The world-famous Pokémon Professor.",
-      "InitialDescription": "Professor Jon is here, ready to give you your first Pokémon!",
+      "Description": "The world-famous Pals Professor.",
+      "InitialDescription": "Professor Jon is here, ready to give you your first Pals!",
       "IsInteractable": true,
-      "Location": "Oak's Lab",
-      "Dialogue": "Welcome to the world of Pokémon! Here, take this Pokédex and choose your starter.",
+      "Location": "Professor Jon's Lab",
+      "Dialogue": "Welcome to the world of Pals! Here, take this Paldex and choose your starter.",
       "AsciiArt": "  ____\n /    \\__\n|  o  o  |\n|   --   |\n \\______/",
       "Quests": ["Get Your Starter!", "Test Your Battle Skills!"]
     }

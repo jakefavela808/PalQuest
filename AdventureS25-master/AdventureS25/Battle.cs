@@ -131,18 +131,18 @@ namespace AdventureS25
             State = BattleState.PalTurn;
         }
 
-        public void PlayerPotion()
+        public void Playerpotion()
         {
             if (potions > 0)
             {
                 int heal = new Random().Next(12, 20);
                 PlayerHP += heal;
                 potions--;
-                Console.WriteLine($"You use a Potion and restore {heal} HP! (Potions left: {potions})");
+                Console.WriteLine($"You use a potion and restore {heal} HP! (potions left: {potions})");
             }
             else
             {
-                Console.WriteLine("You have no Potions left!");
+                Console.WriteLine("You have no potions left!");
             }
             State = BattleState.PalTurn;
         }

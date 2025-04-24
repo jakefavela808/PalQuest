@@ -13,7 +13,7 @@
       "Description": "A capybara-type Pal with a bulb on its back.",
       "InitialDescription": "A wild Clyde Capybara is here, looking ready to join a trainer!",
       "IsAcquirable": true,
-      "Location": "Oak's Lab",
+      "Location": "Professor Jon's Lab",
       "AsciiArt": "AsciiArt.clydeCapybaraPal"
     },
     {

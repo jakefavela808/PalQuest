@@ -45,7 +45,7 @@ public static class Pals
         return null;
     }
 
-    // Returns all Pals whose Location is Oak's Lab (starter Pals)
+    // Returns all Pals whose Location is Professor Jon's Lab (starter Pals)
     public static List<Pal> GetStarterPals()
     {
         var starters = new List<Pal>();

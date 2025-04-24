@@ -10,7 +10,7 @@ public static class CombatCommandHandler
             {"basic", BasicAttack},
             {"special", SpecialAttack},
             {"defend", Defend},
-            {"potion", Potion},
+            {"potion", potion},
             {"tame", Tame},
             {"run", Run},
         };
@@ -42,10 +42,10 @@ public static class CombatCommandHandler
             CurrentBattle.PlayerDefend();
     }
 
-    private static void Potion(Command command)
+    private static void potion(Command command)
     {
         if (CurrentBattle != null)
-            CurrentBattle.PlayerPotion();
+            CurrentBattle.Playerpotion();
     }
 
     private static void Tame(Command command)

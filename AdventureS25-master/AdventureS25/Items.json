@@ -1,25 +1,18 @@
 {
   "Items": [
     {
-      "Name": "Poké Ball",
-      "Description": "A device for catching wild Pokémon.",
-      "InitialDescription": "A Poké Ball lies on the ground, ready to be used.",
+      "Name": "treat",
+      "Description": "A treat for Pal.",
+      "InitialDescription": "A treat lies on the ground, ready to be used.",
       "IsTakeable": true,
-      "Location": "Pallet Town"
+      "Location": "Orange Town"
     },
     {
-      "Name": "Potion",
-      "Description": "A spray-type medicine for treating wounds. It restores the HP of one Pokémon by 20 points.",
-      "InitialDescription": "A Potion sits here, perfect for healing your Pokémon.",
+      "Name": "potion",
+      "Description": "A spray-type medicine for treating wounds. It restores the HP of one Pals by 20 points.",
+      "InitialDescription": "A potion sits here, perfect for healing your Pals.",
       "IsTakeable": true,
       "Location": "Viridian City"
-    },
-    {
-      "Name": "Town Map",
-      "Description": "A convenient map for trainers to navigate the region.",
-      "InitialDescription": "A Town Map is pinned to a signpost.",
-      "IsTakeable": true,
-      "Location": "Pallet Town"
     }
   ]
 }

@@ -16,7 +16,7 @@ public static class ExplorationCommandValidator
     public static List<string> Nouns = new List<string>
     {
         "bagel", "apple", "beer", "east", "west", "north", "south",
-        "up", "down", "sword"
+        "up", "down", "sword", "treat", "potion"
     };
     
     public static bool IsValid(Command command)

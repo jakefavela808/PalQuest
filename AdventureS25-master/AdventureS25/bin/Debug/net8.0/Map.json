@@ -1,25 +1,25 @@
 {
   "Locations": [
     {
-      "Name": "Pallet Town",
-      "Description": "A small town with a few houses and Professor Oak's Lab.",
-      "Connections": {"north": "Route 1", "east": "Oak's Lab"}
+      "Name": "Orange Town",
+      "Description": "A small town with a few houses and Professor Jon's Lab.",
+      "Connections": {"north": "Route 1", "east": "Professor Jon's Lab"}
     },
     {
-      "Name": "Oak's Lab",
-      "Description": "Professor Oak's famous laboratory, filled with Pokémon research equipment.",
-      "Connections": {"west": "Pallet Town"}
+      "Name": "Professor Jon's Lab",
+      "Description": "Professor Jon's famous laboratory, filled with Pals research equipment.",
+      "Connections": {"west": "Orange Town"}
     },
     {
       "Name": "Route 1",
-      "Description": "A grassy path connecting Pallet Town and Viridian City. Wild Pokémon can be found here!",
-      "Connections": {"south": "Pallet Town", "north": "Viridian City"}
+      "Description": "A grassy path connecting Orange Town and Viridian City. Wild Pals can be found here!",
+      "Connections": {"south": "Orange Town", "north": "Viridian City"}
     },
     {
       "Name": "Viridian City",
-      "Description": "A bustling city with a Pokémon Center and Poké Mart.",
+      "Description": "A bustling city with a Pals Center and Pal Mart.",
       "Connections": {"south": "Route 1"}
     }
   ],
-  "StartLocation": "Pallet Town"
+  "StartLocation": "Orange Town"
 }
