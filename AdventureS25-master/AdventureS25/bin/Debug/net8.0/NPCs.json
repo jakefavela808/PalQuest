@@ -1,0 +1,34 @@
+{
+  "NPCs": [
+    {
+      "Name": "Matt",
+      "Description": "A wise Matt with a long beard who lives in a cozy log cabin.",
+      "InitialDescription": "Matt stands here, ready to greet visitors at his log cabin.",
+      "IsInteractable": true,
+      "Location": "Log Cabin",
+      "Dialogue": "Thank you for bringing me this potion! I feel much better now. Please take this as a token of my gratitude.",
+      "AsciiArt": "AsciiArt.mattCharacter",
+      "Quests": []
+    },
+    {
+      "Name": "Professor Jon",
+      "Description": "A local professor who studies Pals and their habitats. Seems to be perpetually on the brink of a coding breakthrough... or a mental breakdown.",
+      "InitialDescription": "Professor Jon is here, ready to give you your first Pals!",
+      "IsInteractable": true,
+      "Location": "Professor Jon's Lab",
+      "Dialogue": "Professor Jon is examining some research notes.",
+      "AsciiArt": "AsciiArt.jonCharacter",
+      "Quests": ["Get Your Starter!", "Test Your Battle Skills!"]
+    },
+    {
+      "Name": "Nurse Noelia",
+      "Description": "A kind nurse with a calm demeanor who helps heal injured Pals.",
+      "InitialDescription": "Nurse Noelia stands behind the counter, ready to help heal your Pals.",
+      "IsInteractable": true,
+      "Location": "Pal Center",
+      "Dialogue": "Hello, I'm Nurse Noelia! Let me heal your Pals to full health.",
+      "AsciiArt": "AsciiArt.nurseCharacter",
+      "Quests": ["Deliver the Potion to Matt!"]
+    }
+  ]
+}
