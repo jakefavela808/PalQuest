@@ -12,21 +12,21 @@
     },
     {
       "Name": "Professor Jon",
-      "Description": "The world-famous Pals Professor.",
+      "Description": "A local professor who studies Pals and their habitats. Seems to be perpetually on the brink of a coding breakthrough... or a mental breakdown.",
       "InitialDescription": "Professor Jon is here, ready to give you your first Pals!",
       "IsInteractable": true,
       "Location": "Professor Jon's Lab",
-      "Dialogue": "Welcome to the world of Pals! Here, take this Paldex and choose your starter.",
+      "Dialogue": "Professor Jon is examining some research notes.",
       "AsciiArt": "AsciiArt.jonCharacter",
       "Quests": ["Get Your Starter!", "Test Your Battle Skills!"]
     },
     {
       "Name": "Nurse Noelia",
-      "Description": "A kind nurse who cares for all Pals and their trainers.",
+      "Description": "A kind nurse with a calm demeanor who helps heal injured Pals.",
       "InitialDescription": "Nurse Noelia stands behind the counter, ready to help heal your Pals.",
       "IsInteractable": true,
       "Location": "Pal Center",
-      "Dialogue": "Hello, I'm Nurse Noelia! Let me heal your Pals to full health. I also have a favor to ask: could you deliver this potion to Matt at the Log Cabin?",
+      "Dialogue": "Hello, I'm Nurse Noelia! Let me heal your Pals to full health.",
       "AsciiArt": "AsciiArt.nurseCharacter",
       "Quests": ["Deliver the Potion to Matt!"]
     }

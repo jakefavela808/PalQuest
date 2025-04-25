@@ -38,7 +38,7 @@
       },
       {
         "Name": "Deliver the Potion to Matt!",
-        "Description": "Deliver a potion from Nurse Noelia to Matt at the Log Cabin.",
+        "Description": "Hello, I'm Nurse Noelia! Let me heal your Pals to full health. I also have a favor to ask: could you deliver this potion to Matt at the Log Cabin?",
         "InitialDescription": "Nurse Noelia has asked you to deliver a potion to Matt, who lives in the Log Cabin.",
         "IsRepeatable": false,
         "Reward": "XP, Matt's gratitude",
