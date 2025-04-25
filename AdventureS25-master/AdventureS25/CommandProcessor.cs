@@ -73,11 +73,12 @@ public static class CommandProcessor
                     {
                         input = input.Substring(0, input.Length - 1);
                         int backspaceCursorLeft = Console.CursorLeft;
-                        if (backspaceCursorLeft > 2) // don't erase the prompt
+                        // Prevent erasing the prompt text
+                        if (Console.CursorLeft > promptLength)
                         {
-                            Console.SetCursorPosition(backspaceCursorLeft - 1, Console.CursorTop);
+                            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
                             Console.Write(" ");
-                            Console.SetCursorPosition(backspaceCursorLeft - 1, Console.CursorTop);
+                            Console.SetCursorPosition(Console.CursorLeft - 1, Console.CursorTop);
                         }
                     }
                 }

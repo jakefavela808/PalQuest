@@ -12,7 +12,7 @@
       "Description": "A spray-type medicine for treating wounds. It restores the HP of one Pals by 20 points.",
       "InitialDescription": "A potion sits here, perfect for healing your Pals.",
       "IsTakeable": true,
-      "Location": "Route 1"
+      "Location": "Pal Center"
     }
   ]
 }

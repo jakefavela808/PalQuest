@@ -15,13 +15,13 @@
     {
       "Name": "Route 1",
       "Description": "A grassy path connecting Orange Town and Viridian City. Wild Pals can be found here!",
-      "Connections": {"south": "Orange Town" , "north": "Viridian City"},
+      "Connections": {"south": "Orange Town" , "north": "Viridian City", "east": "Log Cabin"},
       "AsciiArt": "AsciiArt.grasslandsLocation"
     },
     {
       "Name": "Viridian City",
       "Description": "A bustling city with a Pal Center and Pal Mart.",
-      "Connections": {"south": "Route 1", "east": "Pal Center=", "north": "Log Cabin="},
+      "Connections": {"south": "Route 1", "east": "Pal Center"},
       "AsciiArt": "AsciiArt.cityLocation"
     },
     {
@@ -34,7 +34,7 @@
       "Name": "Log Cabin",
       "Description": "A cozy log cabin deep in the woods, home to Matt.",
       "Connections": {"south": "Viridian City"},
-      "AsciiArt": "AsciiArt.logCabinLocation"
+      "AsciiArt": "AsciiArt.riversideCabinLocation"
     }
   ],
   "StartLocation": "Orange Town"

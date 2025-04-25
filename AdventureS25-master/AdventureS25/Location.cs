@@ -11,6 +11,10 @@ public class Location
     public Dictionary<string, Location> Connections;
     public List<Item> Items = new List<Item>();
     public List<Pal> Pals = new List<Pal>();
+    // Track which wild Pals can still appear in this location (not tamed)
+    private List<Pal> availableWildPals = new List<Pal>();
+    // The currently spawned wild Pal (null if none)
+    private Pal currentWildPal = null;
     public List<NPC> NPCs = new List<NPC>();
     
     public Location(string nameInput, string descriptionInput, string asciiArt = null)
@@ -19,6 +23,8 @@ public class Location
         Description = descriptionInput;
         Connections = new Dictionary<string, Location>();
         AsciiArt = asciiArt;
+        availableWildPals = new List<Pal>();
+        currentWildPal = null;
     }
 
     public void AddConnection(string direction, Location location)
@@ -76,13 +82,19 @@ public class Location
         {
             fullDescription += "\n" + item.GetLocationDescription() + "\n";
         }
-        // Only show wild/unacquired Pals
-        foreach (Pal pal in Pals)
+        // --- Wild Pal spawning logic ---
+        // Remove any availableWildPals that have been tamed
+        availableWildPals.RemoveAll(p => Player.CaughtPals.Any(c => c.Name == p.Name));
+        // If there is no current wild Pal, spawn one randomly if any available
+        if (currentWildPal == null && availableWildPals.Count > 0)
         {
-            if (!Player.CaughtPals.Any(c => c.Name == pal.Name))
-            {
-                fullDescription += $"\nA wild {pal.Name} has appeared!\n";
-            }
+            var rand = new Random();
+            currentWildPal = availableWildPals[rand.Next(availableWildPals.Count)];
+        }
+        // Show only the current wild Pal
+        if (currentWildPal != null)
+        {
+            fullDescription += $"\nA wild {currentWildPal.Name} has appeared!\n";
         }
         foreach (NPC npc in NPCs)
         {
@@ -109,6 +121,29 @@ public class Location
         return fullDescription;
     }
 
+    // Call this when a wild Pal is defeated (not tamed)
+    public void RespawnWildPal()
+    {
+        if (availableWildPals.Count > 0)
+        {
+            var rand = new Random();
+            currentWildPal = availableWildPals[rand.Next(availableWildPals.Count)];
+        }
+        else
+        {
+            currentWildPal = null;
+        }
+    }
+
+    // Call this when a wild Pal is tamed
+    public void RemoveTamedPal(Pal pal)
+    {
+        if (availableWildPals.Contains(pal))
+            availableWildPals.Remove(pal);
+        if (currentWildPal == pal)
+            currentWildPal = null;
+    }
+
     public void AddItem(Item item)
     {
         Debugger.Write("Adding item "+ item.Name + "to " + name);
@@ -118,6 +153,11 @@ public class Location
     public void AddPal(Pal pal)
     {
         Pals.Add(pal);
+        // Only add to availableWildPals if not already tamed
+        if (!Player.CaughtPals.Any(c => c.Name == pal.Name))
+        {
+            availableWildPals.Add(pal);
+        }
     }
 
     public void AddNPC(NPC npc)
@@ -146,6 +186,10 @@ public class Location
     public void RemovePal(Pal pal)
     {
         Pals.Remove(pal);
+        if (availableWildPals.Contains(pal))
+            availableWildPals.Remove(pal);
+        if (currentWildPal == pal)
+            currentWildPal = null;
     }
 
     public void RemoveNPC(NPC npc)

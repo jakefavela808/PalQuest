@@ -37,7 +37,9 @@ public static class ExplorationCommandValidator
                 }
                 else
                 {
-                    Console.WriteLine("I don't know how to do that.");
+                    Typewriter.Print("I don't know how to do that.\n");
+                    Console.Clear();
+                    Player.Look();
                 }
             }
             else if (IsNoun(command.Noun))
@@ -47,12 +49,16 @@ public static class ExplorationCommandValidator
             }
             else
             {
-                Console.WriteLine("I don't know how to do that.");
+                Typewriter.Print("I don't know how to do that.\n");
+                Console.Clear();
+                Player.Look();
             }
         }
         else
         {
-            Console.WriteLine("I don't know the word " + command.Verb + ".");
+            Typewriter.Print("I don't know the word " + command.Verb + ".\n");
+            Console.Clear();
+            Player.Look();
         }
             
         return isValid;

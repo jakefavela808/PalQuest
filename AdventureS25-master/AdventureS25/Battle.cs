@@ -47,7 +47,7 @@ namespace AdventureS25
                 int choice = 0;
                 while (true)
                 {
-                    string input = CommandProcessor.GetInput("Enter the number of your choice: ");
+                    string input = CommandProcessor.GetInput();
                     if (int.TryParse(input, out choice) && choice >= 1 && choice <= Player.CaughtPals.Count)
                     {
                         playerPal = Player.CaughtPals[choice - 1];
@@ -56,9 +56,15 @@ namespace AdventureS25
                     Typewriter.Print("Invalid choice. Please enter a valid number.\n");
                 }
             }
+            else if (Player.CaughtPals != null && Player.CaughtPals.Count == 1)
+            {
+                playerPal = Player.CaughtPals[0];
+                Console.WriteLine($"Using your only Pal: {playerPal.Name} - {playerPal.Description}");
+            }
             else
             {
-                playerPal = Player.CaughtPals != null && Player.CaughtPals.Count > 0 ? Player.CaughtPals[0] : null;
+                playerPal = null;
+                Console.WriteLine("You have no Pals to use in battle!");
             }
 
             string playerName = playerPal != null ? playerPal.Name : "You";
@@ -86,7 +92,7 @@ namespace AdventureS25
             Console.WriteLine($"{oppDesc}");
             Console.WriteLine($"{oppStats}");
             Console.WriteLine("\n============================================\n");
-            Console.WriteLine("Type 'basic', 'special', 'defend', 'potion', 'tame', or 'run'.");
+
         }
 
         public void PlayerAttack()

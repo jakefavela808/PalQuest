@@ -124,7 +124,9 @@ public static class ExplorationCommandHandler
         }
         else
         {
-            Console.WriteLine("I don't know how to do that.");
+            Typewriter.Print("I don't know how to do that.\n");
+            Console.Clear();
+            Player.Look();
         }
     }
     
@@ -150,7 +152,7 @@ public static class ExplorationCommandHandler
     {
         if (string.IsNullOrWhiteSpace(command.Noun))
         {
-            Console.WriteLine("Usage: givequest <quest name>");
+            Typewriter.Print("Usage: givequest <quest name>\n");
             return;
         }
         Player.GiveQuestByName(command.Noun);

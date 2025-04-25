@@ -13,11 +13,11 @@ public static class Typewriter
         { ',', 200 },   // Comma
         { ';', 200 },   // Semicolon
         { ':', 200 },   // Colon
-        { ' ', 15 },    // Space
+        { ' ', 10 },    // Space
         // Add more as desired
     };
 
-    public static int DefaultDelay = 20; // Default delay for normal characters
+    public static int DefaultDelay = 15; // Default delay for normal characters
 
     public static void Print(string text)
     {
