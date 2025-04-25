@@ -9,7 +9,8 @@ public static class Quests
     public static void Initialize()
     {
         nameToQuest.Clear();
-        string path = Path.Combine(Environment.CurrentDirectory, "Quests.json");
+        string exeDir = AppDomain.CurrentDomain.BaseDirectory;
+        string path = Path.Combine(exeDir, "Quests.json");
         string rawText = File.ReadAllText(path);
         QuestsJsonData data = JsonSerializer.Deserialize<QuestsJsonData>(rawText);
         foreach (QuestJsonData questData in data.Quests)

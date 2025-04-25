@@ -34,7 +34,7 @@
       "Name": "Log Cabin",
       "Description": "A cozy log cabin deep in the woods, home to Matt.",
       "Connections": {"south": "Viridian City"},
-      "AsciiArt": "AsciiArt.logCabinLocation"
+      "AsciiArt": "AsciiArt.riversideCabinLocation"
     }
   ],
   "StartLocation": "Orange Town"
