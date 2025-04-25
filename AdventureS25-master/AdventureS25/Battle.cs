@@ -30,6 +30,7 @@ namespace AdventureS25
 
         public void StartBattle()
         {
+            Console.Clear();
             State = BattleState.PlayerTurn;
             Console.WriteLine("\n============================");
             Console.WriteLine("A battle is about to begin!");
@@ -46,14 +47,13 @@ namespace AdventureS25
                 int choice = 0;
                 while (true)
                 {
-                    Console.Write("Enter the number of your choice: ");
-                    string input = Console.ReadLine();
+                    string input = CommandProcessor.GetInput("Enter the number of your choice: ");
                     if (int.TryParse(input, out choice) && choice >= 1 && choice <= Player.CaughtPals.Count)
                     {
                         playerPal = Player.CaughtPals[choice - 1];
                         break;
                     }
-                    Console.WriteLine("Invalid choice. Please enter a valid number.");
+                    Typewriter.Print("Invalid choice. Please enter a valid number.\n");
                 }
             }
             else

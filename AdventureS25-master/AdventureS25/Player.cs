@@ -1,3 +1,4 @@
+using static Typewriter;
 namespace AdventureS25;
 
 public static class Player
@@ -13,15 +14,18 @@ public static class Player
         {
             CaughtPals.Add(pal);
             pal.Acquire();
+            // Remove pal from current location if present
+            if (CurrentLocation.Pals.Contains(pal))
+                CurrentLocation.RemovePal(pal);
             if (!string.IsNullOrWhiteSpace(pal.AsciiArt))
             {
                 Console.WriteLine($"\n{pal.AsciiArt}\n");
             }
-            Console.WriteLine($"You received {pal.Name}! {pal.Description}");
+            Typewriter.Print($"You received {pal.Name}! {pal.Description}\n");
         }
         else
         {
-            Console.WriteLine("Pal not found or already owned.");
+            Typewriter.Print("Pal not found or already owned.\n");
         }
     }
 
@@ -29,10 +33,10 @@ public static class Player
     {
         if (ActiveQuests.Contains(quest) || CompletedQuests.Contains(quest))
             return;
-        Console.WriteLine($"\n=== Quest Offer ===");
-        Console.WriteLine($"Quest: {quest.Name}");
-        Console.WriteLine($"{quest.Description}");
-        Console.WriteLine("Do you want to accept this quest? (yes/no)");
+        Typewriter.Print($"\n=== Quest Offer ===\n");
+        Typewriter.Print($"Quest: {quest.Name}\n");
+        Typewriter.Print($"{quest.Description}\n");
+        Typewriter.Print("Do you want to accept this quest? (yes/no)\n");
         States.ChangeState(StateTypes.Talking);
         PendingQuestOffer = quest;
     }
@@ -46,7 +50,11 @@ public static class Player
             if (DeclinedQuests.Contains(PendingQuestOffer))
                 DeclinedQuests.Remove(PendingQuestOffer);
             ReceiveQuest(PendingQuestOffer);
+            Typewriter.Print($"You accepted the quest: {PendingQuestOffer.Name}\n");
             PendingQuestOffer = null;
+            Console.Clear();
+            States.ChangeState(StateTypes.Exploring);
+            Look();
         }
     }
 
@@ -55,8 +63,11 @@ public static class Player
         if (PendingQuestOffer != null)
         {
             DeclinedQuests.Add(PendingQuestOffer);
-            Console.WriteLine($"You declined the quest: {PendingQuestOffer.Name}");
+            Typewriter.Print($"You declined the quest: {PendingQuestOffer.Name}\n");
             PendingQuestOffer = null;
+            Console.Clear();
+            States.ChangeState(StateTypes.Exploring);
+            Look();
         }
     }
 
@@ -69,17 +80,22 @@ public static class Player
         }
     }
 
-    public static void CompleteQuest(Quest quest)
+    public static void CompleteQuest(Quest quest, bool returnToTalking = false)
     {
         if (ActiveQuests.Contains(quest) && !quest.IsComplete())
         {
             quest.Complete();
             ActiveQuests.Remove(quest);
             CompletedQuests.Add(quest);
-            Console.WriteLine($"\n=== Quest Completed! ===");
-            Console.WriteLine($"Quest: {quest.Name}");
-            Console.WriteLine($"Reward: {quest.Reward}");
+            Typewriter.Print($"\n=== Quest Completed! ===\n");
+            Typewriter.Print($"Quest: {quest.Name}\n");
             GrantReward(quest.Reward);
+            Console.Clear();
+            if (returnToTalking)
+                States.ChangeState(StateTypes.Talking);
+            else
+                States.ChangeState(StateTypes.Exploring);
+            Look();
         }
     }
 
@@ -87,19 +103,19 @@ public static class Player
     {
         if (ActiveQuests.Count == 0)
         {
-            Console.WriteLine("No active quests.");
+            Typewriter.Print("No active quests.\n");
             return;
         }
-        Console.WriteLine("=== Active Quests ===");
+        Typewriter.Print("=== Active Quests ===\n");
         foreach (var quest in ActiveQuests)
         {
-            Console.WriteLine($"\nQuest: {quest.Name}");
-            Console.WriteLine($"Description: {quest.Description}");
+            Typewriter.Print($"\nQuest: {quest.Name}\n");
+            Typewriter.Print($"Description: {quest.Description}\n");
             if (quest.Objectives != null && quest.Objectives.Count > 0)
             {
-                Console.WriteLine("Objectives:");
+                Typewriter.Print("Objectives:\n");
                 foreach (var obj in quest.Objectives)
-                    Console.WriteLine($"- {obj}");
+                    Typewriter.Print($"- {obj}\n");
             }
         }
     }
@@ -108,21 +124,21 @@ public static class Player
     {
         if (CompletedQuests.Count == 0)
         {
-            Console.WriteLine("No completed quests.");
+            Typewriter.Print("No completed quests.\n");
             return;
         }
-        Console.WriteLine("=== Completed Quests ===");
+        Typewriter.Print("=== Completed Quests ===\n");
         foreach (var quest in CompletedQuests)
         {
-            Console.WriteLine($"\nQuest: {quest.Name}");
-            Console.WriteLine($"Description: {quest.Description}");
+            Typewriter.Print($"\nQuest: {quest.Name}\n");
+            Typewriter.Print($"Description: {quest.Description}\n");
             if (quest.Objectives != null && quest.Objectives.Count > 0)
             {
-                Console.WriteLine("Objectives:");
+                Typewriter.Print("Objectives:\n");
                 foreach (var obj in quest.Objectives)
-                    Console.WriteLine($"- {obj}");
+                    Typewriter.Print($"- {obj}\n");
             }
-            Console.WriteLine($"Reward: {quest.Reward}");
+            Typewriter.Print($"Reward: {quest.Reward}\n");
         }
     }
 
@@ -135,7 +151,7 @@ public static class Player
         if (item != null)
         {
             Inventory.Add(item);
-            Console.WriteLine($"You received: {item.Name}");
+            Typewriter.Print($"You received: {item.Name}\n");
         }
         else if (reward.ToLower().EndsWith("xp"))
         {
@@ -144,12 +160,12 @@ public static class Player
             if (parts.Length > 0 && int.TryParse(parts[0], out int xp))
             {
                 // Add XP to player (implement XP system as needed)
-                Console.WriteLine($"You gained {xp} XP!");
+                Typewriter.Print($"You gained {xp} XP!\n");
             }
         }
         else
         {
-            Console.WriteLine($"Reward: {reward}");
+            Typewriter.Print($"Reward: {reward}\n");
         }
     }
     public static void GiveQuestByName(string questName)
@@ -157,40 +173,43 @@ public static class Player
         var quest = Quests.GetQuestByName(questName);
         if (quest == null)
         {
-            Console.WriteLine($"Quest not found: {questName}");
+            Typewriter.Print($"Quest not found: {questName}\n");
             return;
         }
         if (ActiveQuests.Contains(quest))
         {
-            Console.WriteLine($"You already have the quest: {quest.Name}");
+            Typewriter.Print($"You already have the quest: {quest.Name}\n");
             return;
         }
         if (CompletedQuests.Contains(quest))
         {
-            Console.WriteLine($"You have already completed the quest: {quest.Name}");
+            Typewriter.Print($"You have already completed the quest: {quest.Name}\n");
             return;
         }
         ActiveQuests.Add(quest);
-        Console.WriteLine($"\n=== New Quest Given! ===");
-        Console.WriteLine($"Quest: {quest.Name}");
-        Console.WriteLine($"{quest.Description}\n");
+        Typewriter.Print($"\n=== New Quest Given! ===\n");
+        Typewriter.Print($"Quest: {quest.Name}\n");
+        Typewriter.Print($"{quest.Description}\n");
     }
     // ...
     public static void ShowCaughtPals()
     {
+        Console.Clear();
+        Player.Look();
+        
         if (CaughtPals.Count == 0)
         {
-            Console.WriteLine("You haven't caught any Pals yet.");
+            Typewriter.Print("You haven't caught any Pals yet.\n");
             return;
         }
-        Console.WriteLine("Your caught Pals:");
+        Typewriter.Print("Your caught Pals:\n");
         foreach (var pal in CaughtPals)
         {
-            Console.WriteLine($"\n=== {pal.Name} ===");
+            Typewriter.Print($"\n=== {pal.Name} ===\n");
             if (!string.IsNullOrWhiteSpace(pal.AsciiArt))
                 Console.WriteLine(pal.AsciiArt);
-            Console.WriteLine($"Description: {pal.Description}");
-            Console.WriteLine($"Stats: {pal.GetBattleStatsString(pal.HP)}");
+            Typewriter.Print($"Description: {pal.Description}\n");
+            Typewriter.Print($"Stats: {pal.GetBattleStatsString(pal.HP)}\n");
         }
     }
     public static List<Pal> CaughtPals = new List<Pal>();
@@ -217,11 +236,11 @@ public static class Player
         {
             Console.Clear();
             CurrentLocation = CurrentLocation.GetLocationInDirection(command);
-            Console.WriteLine(CurrentLocation.GetDescription());
+            Console.WriteLine(CurrentLocation.GetDescription() + "\n");
         }
         else
         {
-            Console.WriteLine("You can't move " + command.Noun + ".");
+            Typewriter.Print("You can't move " + command.Noun + ".\n");
         }
     }
 
@@ -237,22 +256,25 @@ public static class Player
 
         if (item == null)
         {
-            Console.WriteLine("I don't know what " + command.Noun + " is.");
+            Typewriter.Print("I don't know what " + command.Noun + " is.\n");
         }
         else if (!CurrentLocation.HasItem(item))
         {
-            Console.WriteLine("There is no " + command.Noun + " here.");
+            Typewriter.Print("There is no " + command.Noun + " here.\n");
         }
         else if (!item.IsTakeable)
         {
-            Console.WriteLine("The " + command.Noun + " can't be taked.");
+            Typewriter.Print("The " + command.Noun + " can't be taked.\n");
         }
         else
         {
             Inventory.Add(item);
             CurrentLocation.RemoveItem(item);
             item.Pickup();
-            Console.WriteLine("You take the " + command.Noun + ".");
+            Typewriter.Print("You take the " + command.Noun + ".\n");
+            Console.Clear();
+            States.ChangeState(StateTypes.Exploring);
+            Look();
         }
     }
 
@@ -260,22 +282,22 @@ public static class Player
     {
         if (Inventory.Count == 0)
         {
-            Console.WriteLine("You are empty-handed.");
+            Typewriter.Print("You are empty-handed.\n");
         }
         else
         {
-            Console.WriteLine("You are carrying:");
+            Typewriter.Print("You are carrying:\n");
             foreach (Item item in Inventory)
             {
                 string article = SemanticTools.CreateArticle(item.Name);
-                Console.WriteLine(" " + article + " " + item.Name);
+                Typewriter.Print(" " + article + " " + item.Name + "\n");
             }
         }
     }
 
     public static void Look()
     {
-        Console.WriteLine(CurrentLocation.GetDescription());
+        Console.WriteLine(CurrentLocation.GetDescription() + "\n");
     }
 
     public static void Drop(Command command)
@@ -289,13 +311,13 @@ public static class Player
         }
         else if (!Inventory.Contains(item))
         {
-            Console.WriteLine("You're not carrying the " + command.Noun + ".");
+            Typewriter.Print("You're not carrying the " + command.Noun + ".\n");
         }
         else
         {
             Inventory.Remove(item);
             CurrentLocation.AddItem(item);
-            Console.WriteLine("You drop the " + command.Noun + ".");
+            Typewriter.Print("You drop the " + command.Noun + ".\n");
         }
 
     }
@@ -304,7 +326,7 @@ public static class Player
     {
         if (command.Noun == "beer")
         {
-            Console.WriteLine("** drinking beer");
+            Typewriter.Print("** drinking beer\n");
             Conditions.ChangeCondition(ConditionTypes.IsDrunk, true);
             RemoveItemFromInventory("beer");
             AddItemToInventory("beer-bottle");
@@ -345,11 +367,11 @@ public static class Player
             {
                 if (DefeatedTrainers.Contains(npc.Name))
                 {
-                    Console.WriteLine($"Trainer {npc.Name}: You already beat me! Maybe next time...");
+                    Typewriter.Print($"Trainer {npc.Name}: You already beat me! Maybe next time...\n");
                     States.ChangeState(StateTypes.Talking);
                     return;
                 }
-                Console.WriteLine($"Trainer {npc.Name} challenges you to a battle!");
+                Typewriter.Print($"Trainer {npc.Name} challenges you to a battle!\n");
                 States.ChangeState(StateTypes.Fighting);
                 // Pick the first Pal for now (can be extended to multiple)
                 var battle = new Battle(npc.Pals[0]);
@@ -360,7 +382,7 @@ public static class Player
                     if (battle.State == BattleState.PlayerTurn)
                     {
                         Console.Write("> ");
-                        string input = Console.ReadLine()?.Trim().ToLower();
+                        string input = CommandProcessor.GetInput("> ").Trim().ToLower();
                         Command combatCommand = new Command();
                         combatCommand.Verb = input;
                         if (CombatCommandValidator.IsValid(combatCommand))
@@ -368,7 +390,7 @@ public static class Player
                             CombatCommandHandler.Handle(combatCommand);
                             if (battle.State == BattleState.Won)
                             {
-                                Console.WriteLine($"You defeated Trainer {npc.Name}!");
+                                Typewriter.Print($"You defeated Trainer {npc.Name}!\n");
                                 States.ChangeState(StateTypes.Exploring);
                                 return;
                             }
@@ -379,7 +401,7 @@ public static class Player
                         }
                         else
                         {
-                            Console.WriteLine("Invalid command. Valid commands are: basic, special, defend, potion, tame, run.");
+                            Typewriter.Print("Invalid command. Valid commands are: basic, special, defend, potion, tame, run.\n");
                         }
                     }
                     else if (battle.State == BattleState.PalTurn)
@@ -396,15 +418,15 @@ public static class Player
                 return;
             }
             // Non-trainer NPCs
-            Console.WriteLine($"You talk to {npc.Name}.");
+            Typewriter.Print($"You talk to {npc.Name}.\n");
             if (!string.IsNullOrWhiteSpace(npc.AsciiArt))
             {
                 Console.WriteLine(npc.AsciiArt);
             }
-            Console.WriteLine(npc.Description);
+            Typewriter.Print(npc.Description + "\n");
             if (!string.IsNullOrWhiteSpace(npc.Dialogue))
             {
-                Console.WriteLine(npc.Dialogue);
+                Typewriter.Print(npc.Dialogue + "\n");
             }
             // Nurse Noelia quest logic
             if (npc.Name.ToLower().Contains("nurse noelia"))
@@ -420,7 +442,7 @@ public static class Player
                         // pal.CurrentHP = pal.HP;
                     }
                     Console.WriteLine("All your Pals have been fully healed!");
-                    CompleteQuest(visitNurseQuest);
+                    CompleteQuest(visitNurseQuest, true);
                     if (deliverPotionQuest != null && !ActiveQuests.Contains(deliverPotionQuest) && !deliverPotionQuest.IsComplete())
                     {
                         OfferQuest(deliverPotionQuest);
@@ -447,12 +469,12 @@ public static class Player
                     if (Inventory.Contains(potion))
                     {
                         Inventory.Remove(potion);
-                        Console.WriteLine("Thank you for bringing me this potion! I feel much better now. Please take this as a token of my gratitude.");
-                        CompleteQuest(deliverPotionQuest); // This will print the reward!
+                        Typewriter.Print("Thank you for bringing me this potion! I feel much better now. Please take this as a token of my gratitude.\n");
+                        CompleteQuest(deliverPotionQuest, false); // Stay in Exploring after Matt's quest
                     }
                     else
                     {
-                        Console.WriteLine("Do you have my potion?");
+                        Typewriter.Print("Do you have my potion?\n");
                     }
                 }
                 else if (deliverPotionQuest != null && !ActiveQuests.Contains(deliverPotionQuest) && !deliverPotionQuest.IsComplete() && PendingQuestOffer == null)
@@ -468,43 +490,40 @@ public static class Player
                 var starterPals = Pals.GetStarterPals();
                 if (starterPals.Count > 0)
                 {
-                    Console.WriteLine("\nProfessor Jon: Please choose your starter Pal!");
+                    Typewriter.Print("\nProfessor Jon: Please choose your starter Pal!\n");
                     for (int i = 0; i <starterPals.Count; i++)
                     {
-                        Console.WriteLine($"[{i + 1}] {starterPals[i].Name} - {starterPals[i].Description}");
+                        Typewriter.Print($"[{i + 1}] {starterPals[i].Name} - {starterPals[i].Description}\n");
                     }
                     int choice = -1;
                     while (choice < 1 || choice > starterPals.Count)
                     {
-                        Console.Write("Enter the number of your choice: ");
-                        string input = Console.ReadLine();
+                        string input = CommandProcessor.GetInput("Enter the number of your choice: ");
                         int.TryParse(input, out choice);
                     }
                     var chosenPal = starterPals[choice - 1];
                     AddPal(chosenPal);
-                    Console.WriteLine($"\nYou chose {chosenPal.Name} as your starter!");
+                    Typewriter.Print($"\nYou chose {chosenPal.Name} as your starter!\n");
                     // Complete 'Get Your Starter!' quest if active
                     var starterQuest = Quests.GetQuestByName("Get Your Starter!");
                     if (starterQuest != null && ActiveQuests.Contains(starterQuest) && !starterQuest.IsComplete())
                     {
-                        CompleteQuest(starterQuest);
-                    }
-                    // No longer immediately give 'Test Your Battle Skills!' quest here. It will be offered after 'Get Your Starter!' is completed.
+                        CompleteQuest(starterQuest, false); // Stay in Exploring after starter quest
+                    }                  // No longer immediately give 'Test Your Battle Skills!' quest here. It will be offered after 'Get Your Starter!' is completed.
                 }
                 else
                 {
-                    Console.WriteLine("No starter Pals available!");
+                    Typewriter.Print("No starter Pals available!\n");
                 }
             }
 
             npc.OfferQuests();
-            // Complete 'Get Your Starter!' quest after talking to Professor Jon and after player has a Pal
             States.ChangeState(StateTypes.Talking);
             return;
         }
         else
         {
-            Console.WriteLine("There is no one here to talk to.");
+            Typewriter.Print("There is no one here to talk to.\n");
         }
     }
 
@@ -514,14 +533,55 @@ public static class Player
         {
             if (CaughtPals == null || CaughtPals.Count == 0)
             {
-                Console.WriteLine("You don't have any Pals to battle with!");
+                Typewriter.Print("You don't have any Pals to battle with!\n");
+                Console.Clear();
+                Player.Look();
                 return;
             }
-            Pal pal = CurrentLocation.Pals[0];
-            Console.WriteLine($"A wild {pal.Name} appears! You are pulled into battle.");
-            if (!string.IsNullOrWhiteSpace(pal.Description))
+            // Filter to wild/unacquired Pals only
+            var wildPals = CurrentLocation.Pals.Where(p => !CaughtPals.Contains(p)).ToList();
+            if (wildPals.Count == 0)
             {
-                Console.WriteLine(pal.Description);
+                Typewriter.Print("There are no wild Pals here to battle!\n");
+                Console.Clear();
+                Player.Look();
+                return;
+            }
+            Pal pal;
+            if (wildPals.Count == 1)
+            {
+                pal = wildPals[0];
+                Console.WriteLine($"A wild {pal.Name} appears! You are pulled into battle.");
+                if (!string.IsNullOrWhiteSpace(pal.Description))
+                {
+                    Console.WriteLine(pal.Description);
+                }
+            }
+            else
+            {
+                Typewriter.Print("Choose which wild Pal you want to battle:\n");
+                for (int i = 0; i < wildPals.Count; i++)
+                {
+                    var p = wildPals[i];
+                    Typewriter.Print($"[{i + 1}] {p.Name} - {p.Description}\n");
+                }
+                int choice = 0;
+                while (true)
+                {
+                    Typewriter.Print("Enter the number of your choice: ");
+                    string input = CommandProcessor.GetInput("> ");
+                    if (int.TryParse(input, out choice) && choice >= 1 && choice <= wildPals.Count)
+                    {
+                        pal = wildPals[choice - 1];
+                        break;
+                    }
+                    Typewriter.Print("Invalid choice. Please enter a valid number.\n");
+                }
+                Console.WriteLine($"A wild {pal.Name} appears! You are pulled into battle.");
+                if (!string.IsNullOrWhiteSpace(pal.Description))
+                {
+                    Console.WriteLine(pal.Description);
+                }
             }
             States.ChangeState(StateTypes.Fighting);
 
@@ -535,7 +595,7 @@ public static class Player
                 if (battle.State == BattleState.PlayerTurn)
                 {
                     Console.Write("> ");
-                    string input = Console.ReadLine()?.Trim().ToLower();
+                    string input = CommandProcessor.GetInput("> ").Trim().ToLower();
                     Command combatCommand = new Command();
                     combatCommand.Verb = input;
                     if (CombatCommandValidator.IsValid(combatCommand))
@@ -544,7 +604,7 @@ public static class Player
                         // Tame can win instantly, so check for win
                         if (battle.State == BattleState.Won)
                         {
-                            Console.WriteLine($"You defeated {pal.Name}!");
+                            Typewriter.Print($"You defeated {pal.Name}!\n");
                             // Complete 'Test Your Battle Skills!' quest if active and not complete
                             foreach (var quest in ActiveQuests.ToList())
                             {
@@ -556,9 +616,7 @@ public static class Player
                                     if (visitNurseQuest != null && !ActiveQuests.Contains(visitNurseQuest) && !visitNurseQuest.IsComplete())
                                     {
                                         ActiveQuests.Add(visitNurseQuest);
-                                        Console.WriteLine("\n=========== New Quest Added! ===========");
-                                        Console.WriteLine($"Quest: {visitNurseQuest.Name}");
-                                        Console.WriteLine($"{visitNurseQuest.Description}\n");
+                                        CurrentLocation.NewQuestAccepted = visitNurseQuest;
                                     }
                                 }
                             }
@@ -583,28 +641,25 @@ public static class Player
             }
             if (battle.State == BattleState.Won)
             {
-                Console.WriteLine($"You caught {pal.Name}! {pal.Name} is now your Pal.");
+                Typewriter.Print($"You caught {pal.Name}! {pal.Name} is now your Pal.\n");
                 if (!CaughtPals.Contains(pal))
                 {
                     CaughtPals.Add(pal);
+                    if (CurrentLocation.Pals.Contains(pal))
+                    {
+                        CurrentLocation.RemovePal(pal);
+                    }
                     if (!string.IsNullOrWhiteSpace(pal.AsciiArt))
                     {
                         Console.WriteLine($"\n{pal.AsciiArt}\n");
                     }
                     Console.WriteLine(pal.Description);
-                    // Offer Sandie quest if catching Sandie
-                    if (pal.Name.ToLower().Contains("Sandie"))
-                    {
-                        var SandieQuest = Quests.GetQuestByName("Catch a Sandie!");
-                        if (SandieQuest != null)
-                            OfferQuest(SandieQuest);
-                        // Complete 'Catch a Sandie!' quest if active
-                        foreach (var quest in ActiveQuests.ToList())
-                        {
-                            if (quest.Name == "Catch a Sandie!" && !quest.IsComplete())
-                                CompleteQuest(quest);
-                        }
-                    }
+
+                }
+                // Fallback: always remove from location if present
+                if (CurrentLocation.Pals.Contains(pal))
+                {
+                    CurrentLocation.RemovePal(pal);
                 }
                 // Complete 'Test Your Battle Skills!' quest if active and not complete
                 foreach (var quest in ActiveQuests.ToList())
@@ -618,7 +673,7 @@ public static class Player
         }
         else
         {
-            Console.WriteLine("There are no Pals here to battle!");
+            Typewriter.Print("There are no Pals here to battle!\n");
         }
     }
 
@@ -630,7 +685,7 @@ public static class Player
         // if there's no location with that name
         if (newLocation == null)
         {
-            Console.WriteLine("Trying to move to unknown location: " + locationName + ".");
+            Typewriter.Print("Trying to move to unknown location: " + locationName + ".\n");
             return;
         }
             

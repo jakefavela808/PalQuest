@@ -1,4 +1,4 @@
-﻿namespace AdventureS25;
+namespace AdventureS25;
 
 public static class Parser
 {
@@ -10,7 +10,7 @@ public static class Parser
         // breaK the input into individual words
         List<string> words = input.Split(' ').ToList();
 
-        if (input == "")
+        if (string.IsNullOrWhiteSpace(input))
         {
             words = new List<string>();
         }
@@ -26,7 +26,7 @@ public static class Parser
         {
             command.Verb = words[0];
         }
-        else
+        else if (!string.IsNullOrWhiteSpace(input))
         {
             Console.WriteLine("I don't understand that.");
         }

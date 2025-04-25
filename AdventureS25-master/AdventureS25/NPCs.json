@@ -7,7 +7,7 @@
       "IsInteractable": true,
       "Location": "Log Cabin",
       "Dialogue": "Thank you for bringing me this potion! I feel much better now. Please take this as a token of my gratitude.",
-      "AsciiArt": "  /\\_/\\\n ( o.o )\n  > ^ <",
+      "AsciiArt": "AsciiArt.mattCharacter",
       "Quests": []
     },
     {
@@ -17,7 +17,7 @@
       "IsInteractable": true,
       "Location": "Professor Jon's Lab",
       "Dialogue": "Welcome to the world of Pals! Here, take this Paldex and choose your starter.",
-      "AsciiArt": "  ____\n /    \\__\n|  o  o  |\n|   --   |\n \\______/",
+      "AsciiArt": "AsciiArt.jonCharacter",
       "Quests": ["Get Your Starter!", "Test Your Battle Skills!"]
     },
     {
@@ -27,7 +27,7 @@
       "IsInteractable": true,
       "Location": "Pal Center",
       "Dialogue": "Hello, I'm Nurse Noelia! Let me heal your Pals to full health. I also have a favor to ask: could you deliver this potion to Matt at the Log Cabin?",
-      "AsciiArt": "  _\n ( )\n /_\\\n | |\n/___\\\n(^_^)",
+      "AsciiArt": "AsciiArt.nurseCharacter",
       "Quests": ["Deliver the Potion to Matt!"]
     }
   ]

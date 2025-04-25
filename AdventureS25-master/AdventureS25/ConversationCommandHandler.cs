@@ -24,6 +24,7 @@ public static class ConversationCommandHandler
 
     private static void Yes(Command command)
     {
+
         if (Player.PendingQuestOffer != null)
         {
             Player.AcceptQuest();
@@ -48,7 +49,8 @@ public static class ConversationCommandHandler
 
     private static void Leave(Command command)
     {
-        Console.WriteLine("You are dead");
+        Console.Clear();
         States.ChangeState(StateTypes.Exploring);
+        Player.Look();
     }
 }

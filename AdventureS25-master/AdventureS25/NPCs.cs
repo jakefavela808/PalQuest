@@ -34,13 +34,32 @@ if (npcData.Pals != null)
             pals.Add(pal);
     }
 }
+string asciiArt = npcData.AsciiArt;
+if (!string.IsNullOrWhiteSpace(asciiArt) && asciiArt.StartsWith("AsciiArt."))
+{
+    string artField = asciiArt.Substring("AsciiArt.".Length);
+    var artType = typeof(AsciiArt);
+    var artProp = artType.GetProperty(artField, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.IgnoreCase);
+    if (artProp != null)
+    {
+        asciiArt = artProp.GetValue(null)?.ToString() ?? string.Empty;
+    }
+    else
+    {
+        var artFieldInfo = artType.GetField(artField, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.IgnoreCase);
+        if (artFieldInfo != null)
+        {
+            asciiArt = artFieldInfo.GetValue(null)?.ToString() ?? string.Empty;
+        }
+    }
+}
 NPC npc = new NPC(
     npcData.Name,
     npcData.Description,
     npcData.InitialDescription,
     npcData.IsInteractable,
     npcData.Dialogue,
-    npcData.AsciiArt,
+    asciiArt,
     quests,
     npcData.IsTrainer,
     pals

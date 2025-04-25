@@ -74,9 +74,13 @@ public class Location
         {
             fullDescription += "\n" + item.GetLocationDescription() + "\n";
         }
+        // Only show wild/unacquired Pals
         foreach (Pal pal in Pals)
         {
-            fullDescription += "\n" + pal.GetWorldDescription() + "\n";
+            if (!Player.CaughtPals.Any(c => c.Name == pal.Name))
+            {
+                fullDescription += "\n" + pal.GetWorldDescription() + "\n";
+            }
         }
         foreach (NPC npc in NPCs)
         {
@@ -92,7 +96,7 @@ public class Location
                 string locName = kvp.Value != null ? kvp.Value.name : "Unknown";
                 exitParts.Add($"{dir} ({locName})");
             }
-            fullDescription += "\n" + string.Join(" | ", exitParts) + " |";
+            fullDescription += "\n| " + string.Join(" | ", exitParts) + " |";
         }
         // Show quest acceptance message if a new quest was just accepted here
         if (NewQuestAccepted != null)
