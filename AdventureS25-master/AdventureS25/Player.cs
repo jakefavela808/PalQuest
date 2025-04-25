@@ -19,7 +19,7 @@ public static class Player
                 CurrentLocation.RemovePal(pal);
             if (!string.IsNullOrWhiteSpace(pal.AsciiArt))
             {
-                Console.WriteLine($"\n{pal.AsciiArt}\n");
+                Console.WriteLine($"\n{pal.AsciiArt}");
             }
             Typewriter.Print($"You received {pal.Name}! {pal.Description}\n");
         }
@@ -33,7 +33,7 @@ public static class Player
     {
         if (ActiveQuests.Contains(quest) || CompletedQuests.Contains(quest))
             return;
-        Typewriter.Print($"\n=== Quest Offer ===\n");
+        Typewriter.Print($"=== Quest Offer ===\n");
         Typewriter.Print($"Quest: {quest.Name}\n");
         Typewriter.Print($"{quest.Description}\n");
         Typewriter.Print("Do you want to accept this quest? (yes/no)\n");
@@ -50,7 +50,7 @@ public static class Player
             if (DeclinedQuests.Contains(PendingQuestOffer))
                 DeclinedQuests.Remove(PendingQuestOffer);
             ReceiveQuest(PendingQuestOffer);
-            Typewriter.Print($"You accepted the quest: {PendingQuestOffer.Name}\n");
+            Typewriter.Print($"You accepted the quest: {PendingQuestOffer.Name}");
             PendingQuestOffer = null;
             Console.Clear();
             States.ChangeState(StateTypes.Exploring);
@@ -106,10 +106,10 @@ public static class Player
             Typewriter.Print("No active quests.\n");
             return;
         }
-        Typewriter.Print("=== Active Quests ===\n");
+        Typewriter.Print("\n=== Active Quests ===\n");
         foreach (var quest in ActiveQuests)
         {
-            Typewriter.Print($"\nQuest: {quest.Name}\n");
+            Typewriter.Print($"Quest: {quest.Name}\n");
             Typewriter.Print($"Description: {quest.Description}\n");
             if (quest.Objectives != null && quest.Objectives.Count > 0)
             {

@@ -62,7 +62,9 @@ public class Location
 
     public string GetDescription()
     {
-        string fullDescription = LocationNameFormatter.Decorate(name);
+        // Prepend available commands
+        string fullDescription = CommandList.exploreCommands + "\n";
+        fullDescription += LocationNameFormatter.Decorate(name);
         string asciiArtToDisplay = GetAsciiArtResolved();
         if (!string.IsNullOrWhiteSpace(asciiArtToDisplay))
         {
@@ -79,7 +81,7 @@ public class Location
         {
             if (!Player.CaughtPals.Any(c => c.Name == pal.Name))
             {
-                fullDescription += "\n" + pal.GetWorldDescription() + "\n";
+                fullDescription += $"\nA wild {pal.Name} has appeared!\n";
             }
         }
         foreach (NPC npc in NPCs)
