@@ -1,0 +1,3 @@
+/Users/jakefavela/Desktop/PalQuest/PalQuest/publish/PalQuest.pdb
+/Users/jakefavela/Desktop/PalQuest/PalQuest/publish/Map.json
+/Users/jakefavela/Desktop/PalQuest/PalQuest/publish/PalQuest.exe

@@ -393,7 +393,7 @@ public static class Player
                 {
                     if (battle.State == BattleState.PlayerTurn)
                     {
-                        
+                        Console.WriteLine("Type 'basic', 'special', 'defend', 'potion', 'tame', or 'run'.");
                         string input = CommandProcessor.GetInput().Trim().ToLower();
                         Command combatCommand = new Command();
                         combatCommand.Verb = input;
@@ -516,7 +516,15 @@ public static class Player
                     while (choice < 1 || choice > starterPals.Count)
                     {
                         string input = CommandProcessor.GetInput();
-                        int.TryParse(input, out choice);
+                        if (!int.TryParse(input, out choice))
+                        {
+                            Typewriter.Print("Please enter the number of the Pal you want to choose.\n");
+                            continue;
+                        }
+                        if (choice < 1 || choice > starterPals.Count)
+                        {
+                            Typewriter.Print($"Please enter a number between 1 and {starterPals.Count}.\n");
+                        }
                     }
                     var chosenPal = starterPals[choice - 1];
                     AddPal(chosenPal);
@@ -616,7 +624,7 @@ public static class Player
                     }
                     else
                     {
-                        Console.WriteLine("Invalid command. Valid commands are: basic, special, defend, potion, tame, run.");
+                        Typewriter.Print("Invalid command. Valid commands are: basic, special, defend, potion, tame, run.\n");
                     }
                 }
                 else if (battle.State == BattleState.PalTurn)

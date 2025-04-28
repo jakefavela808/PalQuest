@@ -2,7 +2,7 @@
   "Quests": [
     {
       "Name": "Get Your Starter!",
-      "Description": "Talk to Jon in Professor Jon's Lab and pick your first Pals!\n",
+      "Description": "Talk to Jon in Professor Jon's Lab and pick your first Pals!",
       "InitialDescription": "Jon is waiting for you in Professor Jon's Lab to help you choose your starter.",
       "IsRepeatable": false,
       "Reward": "Starter Pals",

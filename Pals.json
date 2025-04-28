@@ -6,7 +6,8 @@
       "InitialDescription": "A wild Sandie is here, its tail crackling with electricity!",
       "IsAcquirable": true,
       "Location": "",
-      "AsciiArt": "AsciiArt.sandiePal"
+      "AsciiArt": "AsciiArt.sandiePal",
+      "Moves": ["Quantum Chomp", "Corgi Overdrive"]
     },
     {
       "Name": "Clyde Capybara",
@@ -14,7 +15,8 @@
       "InitialDescription": "A wild Clyde Capybara is here, looking ready to join a trainer!",
       "IsAcquirable": true,
       "Location": "",
-      "AsciiArt": "AsciiArt.clydeCapybaraPal"
+      "AsciiArt": "AsciiArt.clydeCapybaraPal",
+      "Moves": ["Capybara Splash", "Zen Wave"]
     },
     {
       "Name": "Gloop Glorp",
@@ -22,7 +24,8 @@
       "InitialDescription": "A wild Gloop Glorp flutters nearby, pecking at the ground.",
       "IsAcquirable": true,
       "Location": "",
-      "AsciiArt": "AsciiArt.gloopGlorpPal"
+      "AsciiArt": "AsciiArt.gloopGlorpPal",
+      "Moves": ["Cosmic Pounce", "Nebula Beam"]
     },
     {
       "Name": "Pibble",
@@ -30,7 +33,8 @@
       "InitialDescription": "A wild Pibble is here, its tail crackling with electricity!",
       "IsAcquirable": true,
       "Location": "Route 1",
-      "AsciiArt": "AsciiArt.pibblePal"
+      "AsciiArt": "AsciiArt.pibblePal",
+      "Moves": ["Big Headbutt", "Trancing Stare"]
     },
     {
       "Name": "Bark Zuckerburg",
@@ -38,7 +42,8 @@
       "InitialDescription": "A wild Bark Zuckerburg is here, its tail crackling with electricity!",
       "IsAcquirable": true,
       "Location": "Route 1",
-      "AsciiArt": "AsciiArt.barkZuckerburgPal"
+      "AsciiArt": "AsciiArt.barkZuckerburgPal",
+      "Moves": ["App Launch", "Tech Takeover"]
     },
     {
       "Name": "Morty",
@@ -46,7 +51,8 @@
       "InitialDescription": "A wild Morty is here, its tail crackling with electricity!",
       "IsAcquirable": true,
       "Location": "Route 1",
-      "AsciiArt": "AsciiArt.mortyPal"
+      "AsciiArt": "AsciiArt.mortyPal",
+      "Moves": ["Freak Out", "Meltdown"]
     }
   ]
 }

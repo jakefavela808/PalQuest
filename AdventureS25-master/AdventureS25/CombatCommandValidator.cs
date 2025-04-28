@@ -10,7 +10,6 @@ public static class CombatCommandValidator
         {
             return true;
         }
-        Console.WriteLine("Invalid command. Valid commands are: basic, special, defend, potion, tame, run.");
         return false;
     }
 }

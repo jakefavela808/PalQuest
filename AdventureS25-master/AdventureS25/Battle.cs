@@ -32,7 +32,9 @@ namespace AdventureS25
         {
             Console.Clear();
             State = BattleState.PlayerTurn;
-            Console.WriteLine("\n============================");
+            Console.Clear();
+            Console.WriteLine(CommandList.combatCommands);
+            Console.WriteLine("============================\n");
             Console.WriteLine("A battle is about to begin!");
 
             // Pal selection logic
@@ -47,7 +49,7 @@ namespace AdventureS25
                 int choice = 0;
                 while (true)
                 {
-                    string input = CommandProcessor.GetInput();
+                    string input = CommandProcessor.GetInput("Enter the number of your choice: ");
                     if (int.TryParse(input, out choice) && choice >= 1 && choice <= Player.CaughtPals.Count)
                     {
                         playerPal = Player.CaughtPals[choice - 1];
@@ -56,15 +58,9 @@ namespace AdventureS25
                     Typewriter.Print("Invalid choice. Please enter a valid number.\n");
                 }
             }
-            else if (Player.CaughtPals != null && Player.CaughtPals.Count == 1)
-            {
-                playerPal = Player.CaughtPals[0];
-                Console.WriteLine($"Using your only Pal: {playerPal.Name} - {playerPal.Description}");
-            }
             else
             {
-                playerPal = null;
-                Console.WriteLine("You have no Pals to use in battle!");
+                playerPal = Player.CaughtPals != null && Player.CaughtPals.Count > 0 ? Player.CaughtPals[0] : null;
             }
 
             string playerName = playerPal != null ? playerPal.Name : "You";
@@ -97,14 +93,17 @@ namespace AdventureS25
 
         public void PlayerAttack()
         {
-            string moveName = playerPal != null && playerPal.Moves.Count > 0 ? playerPal.Moves[0] : "Tackle";
+            string moveName = (playerPal != null && playerPal.Moves.Count > 0) ? playerPal.Moves[0] : "Tackle";
             int atk = playerPal != null ? playerPal.ATK : 10;
             int damage = new Random().Next(atk - 2, atk + 3); // Use Pal's ATK for variability
             if (damage < 1) damage = 1;
             OpponentHP -= damage;
             string palName = playerPal != null ? playerPal.Name : "Your Pal";
-            Console.WriteLine($"{palName} used {moveName} on {Opponent.Name} for {damage} damage!");
+            PrintBattleHeader();
+            Typewriter.Print($"{palName} used {moveName} on {Opponent.Name} for {damage} damage!\n");
             CheckEasierToTame();
+            Typewriter.Print($"{palName} has {PlayerHP} HP left.\n");
+            Typewriter.Print($"{Opponent.Name} has {OpponentHP} HP left.\n");
             if (OpponentHP <= 0)
             {
                 State = BattleState.Won;
@@ -115,13 +114,16 @@ namespace AdventureS25
 
         public void PlayerSpecialAttack()
         {
-            string moveName = playerPal != null && playerPal.Moves.Count > 1 ? playerPal.Moves[1] : "Special Attack";
+            string moveName = (playerPal != null && playerPal.Moves.Count > 1) ? playerPal.Moves[1] : "Special Attack";
             int atk = playerPal != null ? playerPal.ATK : 10;
             int damage = new Random().Next(atk + 3, atk + 8); // Special attack is stronger
             OpponentHP -= damage;
             string palName = playerPal != null ? playerPal.Name : "Your Pal";
-            Console.WriteLine($"{palName} used {moveName} on {Opponent.Name} for {damage} damage!");
+            PrintBattleHeader();
+            Typewriter.Print($"{palName} used {moveName} on {Opponent.Name} for {damage} damage!\n");
             CheckEasierToTame();
+            Typewriter.Print($"{palName} has {PlayerHP} HP left.\n");
+            Typewriter.Print($"{Opponent.Name} has {OpponentHP} HP left.\n");
             if (OpponentHP <= 0)
             {
                 State = BattleState.Won;
@@ -189,10 +191,11 @@ namespace AdventureS25
 
         public void PalAttack()
         {
-            string moveName = Opponent.Moves != null && Opponent.Moves.Count > 0 ? Opponent.Moves[0] : "Tackle";
+            string moveName = (Opponent != null && Opponent.Moves != null && Opponent.Moves.Count > 0) ? Opponent.Moves[0] : "Tackle";
             int atk = Opponent.ATK;
             int damage = new Random().Next(atk - 2, atk + 3);
             if (damage < 1) damage = 1;
+            PrintBattleHeader();
             if (defendActive)
             {
                 damage /= 2;
@@ -200,7 +203,9 @@ namespace AdventureS25
                 Console.WriteLine("Your defense lessened the damage!");
             }
             PlayerHP -= damage;
-            Console.WriteLine($"{Opponent.Name} used {moveName} on you for {damage} damage!");
+            Typewriter.Print($"{Opponent.Name} used {moveName} on you for {damage} damage!\n");
+            Typewriter.Print($"{(playerPal != null ? playerPal.Name : "Your Pal")} has {PlayerHP} HP left.\n");
+            Typewriter.Print($"{Opponent.Name} has {OpponentHP} HP left.\n");
             if (PlayerHP <= 0)
             {
                 State = BattleState.Lost;
@@ -208,6 +213,39 @@ namespace AdventureS25
                 return;
             }
             State = BattleState.PlayerTurn;
+        }
+        // Helper to print the battle header and Pal info
+        private void PrintBattleHeader()
+        {
+            Console.WriteLine(CommandList.combatCommands);
+            Console.WriteLine("============================\n");
+            Console.WriteLine("A battle is about to begin!");
+
+            string playerName = playerPal != null ? playerPal.Name : "You";
+            string playerArt = playerPal != null && !string.IsNullOrWhiteSpace(playerPal.AsciiArt) ? playerPal.AsciiArt : "";
+            string playerDesc = playerPal != null ? playerPal.Description : "A brave trainer ready for battle!";
+            string playerStats = playerPal != null ? playerPal.GetBattleStatsString(PlayerHP) : $"HP {PlayerHP}";
+
+            // Opponent info
+            string oppName = Opponent.Name;
+            string oppArt = !string.IsNullOrWhiteSpace(Opponent.AsciiArt) ? Opponent.AsciiArt : "";
+            string oppDesc = !string.IsNullOrWhiteSpace(Opponent.Description) ? Opponent.Description : "A wild opponent appears!";
+            string oppStats = Opponent.GetBattleStatsString(OpponentHP);
+
+            // Print player Pal info
+            Console.WriteLine($"{playerName}");
+            if (!string.IsNullOrWhiteSpace(playerArt))
+                Console.WriteLine(playerArt);
+            Console.WriteLine($"{playerDesc}");
+            Console.WriteLine($"{playerStats}");
+            Console.WriteLine("\n==================== VS ====================\n");
+            // Print opponent Pal info
+            Console.WriteLine($"{oppName}");
+            if (!string.IsNullOrWhiteSpace(oppArt))
+                Console.WriteLine(oppArt);
+            Console.WriteLine($"{oppDesc}");
+            Console.WriteLine($"{oppStats}");
+            Console.WriteLine("\n============================================\n");
         }
     }
 }
